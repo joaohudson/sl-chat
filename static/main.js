@@ -32,7 +32,14 @@ function setup(){
 
 socket.on('message', (msg) => {
     const li = document.createElement('li');
-    li.innerText = msg.name + ' - ' + msg.content;
+    const nameSpan = document.createElement('span');
+    nameSpan.style.color = 'darkturquoise';
+    nameSpan.innerText = msg.name + ': ';
+    li.appendChild(nameSpan);
+    const messageSpan = document.createElement('span');
+    messageSpan.style.color = 'orange';
+    messageSpan.innerText = msg.content;
+    li.appendChild(messageSpan);
     messageList.appendChild(li);
 });
 

@@ -1,3 +1,5 @@
+const {User} = require('./user')
+
 class Chat{
     constructor(io){
         this.io = io;
@@ -7,9 +9,10 @@ class Chat{
 
     #onConnection(socket){
         console.log('User [' + socket.id + '] connected!');
-        this.users[socket.id] = socket;
+        this.users[socket.id] = new User(socket, socket.id);
+        socket.on('setup', (message) => this.#onSetup(socket.id, message));
         socket.on('disconnect', () => this.#onDisconnect(socket));
-        socket.on('message', (message) => this.#onMenssage(socket.id, message));
+        socket.on('message', (message) => this.#onMenssage(this.users[socket.id], message));
     }
 
     #onDisconnect(socket){
@@ -17,10 +20,14 @@ class Chat{
         delete this.users[socket.id];
     }
 
+    #onSetup(id, message){
+        this.users[id].name = message.name;
+    }
+
     #onMenssage(from, message){
         for(const id of Object.keys(this.users)){
             const user = this.users[id];
-            user.emit('message', '[' + from + ']: ' + message);
+            user.socket.emit('message', '[' + from.name + ']: ' + message);
         }
     }
 }

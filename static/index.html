@@ -10,6 +10,12 @@
             ul{
                 list-style-type: none;
             }
+            div{
+                border-radius: 25px;
+            }
+            .verticalSpace{
+                margin-top: 60px;
+            }
             .chatDiv{
                 background: black;
                 text-align: center;
@@ -19,7 +25,7 @@
                 margin-left: 20%;
             }
             .inputDiv{
-                background-color: gray;
+                background-color: rgba(88, 67, 22, 0.575);
                 padding: 20px;
                 margin-right: 20%;
                 margin-left: 20%;
@@ -27,6 +33,12 @@
         </style>
     </head>
     <body>
+        <h2>Setup Name</h2>
+        <div class="inputDiv">
+            <input type="text" id="nameInput">
+            <button id="nameButton">Submit</button>
+        </div>
+        <div class="verticalSpace"></div>
         <h1>Node Chat</h1>
         <div class="chatDiv">
             <ul id="messageList">

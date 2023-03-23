@@ -1,6 +1,8 @@
 const messageList = document.getElementById('messageList');
 const messageInput = document.getElementById('messageInput');
 const messageButton = document.getElementById('messageButton');
+const nameInput = document.getElementById('nameInput');
+const nameButton = document.getElementById('nameButton');
 
 const socket = io();
 socket.on('message', (msg) => {
@@ -20,3 +22,8 @@ messageInput.onkeydown = (e) => {
 messageButton.onclick = () =>{
     socket.emit('message', messageInput.value);
 };
+
+nameButton.onclick = () => {
+    socket.emit('setup', {name: nameInput.value});
+    nameInput.value = '';
+}

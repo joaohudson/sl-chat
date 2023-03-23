@@ -5,6 +5,7 @@ const nameInput = document.getElementById('nameInput');
 const nameButton = document.getElementById('nameButton');
 const setupDiv = document.getElementById('setupDiv');
 const chatDiv = document.getElementById('chatDiv');
+const [h1] = document.getElementsByTagName('h1');
 const [h2] = document.getElementsByTagName('h2');
 
 const socket = io();
@@ -29,6 +30,7 @@ messageButton.onclick = () =>{
 
 nameButton.onclick = () => {
     socket.emit('setup', {name: nameInput.value});
+    h1.innerText = 'Node Chat';
     h2.innerText = 'Profile: ' + nameInput.value;
     nameInput.value = '';
     setupDiv.style.display = 'none';

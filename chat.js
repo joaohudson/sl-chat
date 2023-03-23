@@ -1,3 +1,4 @@
+const { Message } = require('./message');
 const {User} = require('./user')
 
 class Chat{
@@ -27,7 +28,7 @@ class Chat{
     #onMenssage(from, message){
         for(const id of Object.keys(this.users)){
             const user = this.users[id];
-            user.socket.emit('message', '[' + from.name + ']: ' + message);
+            user.socket.emit('message', new Message(from.name, message));
         }
     }
 }

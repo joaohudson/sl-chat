@@ -11,7 +11,7 @@ const [h2] = document.getElementsByTagName('h2');
 const socket = io();
 socket.on('message', (msg) => {
     const li = document.createElement('li');
-    li.innerText = msg;
+    li.innerText = msg.name + ' - ' + msg.content;
     messageList.appendChild(li);
 });
 
@@ -35,4 +35,16 @@ nameButton.onclick = () => {
     nameInput.value = '';
     setupDiv.style.display = 'none';
     chatDiv.style.display = 'block';
+}
+
+nameInput.onkeydown = (e) => {
+    if(e.key == 'Enter'){
+        e.preventDefault();
+        socket.emit('setup', {name: nameInput.value});
+        h1.innerText = 'Node Chat';
+        h2.innerText = 'Profile: ' + nameInput.value;
+        nameInput.value = '';
+        setupDiv.style.display = 'none';
+        chatDiv.style.display = 'block';
+    }
 }

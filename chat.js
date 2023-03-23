@@ -18,7 +18,12 @@ class Chat{
 
     #onDisconnect(socket){
         console.log('User [' + socket.id + '] disconnected!');
+        const name = this.users[socket.id].name;
         delete this.users[socket.id];
+        for(const id of Object.keys(this.users)){
+            const user = this.users[id];
+            user.socket.emit('exit', name);
+        }
     }
 
     #onSetup(id, message){

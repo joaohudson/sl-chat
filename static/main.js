@@ -30,17 +30,25 @@ function setup(){
     chatDiv.style.display = 'block';
 }
 
-socket.on('message', (msg) => {
+function pushScreenMessage(name, message, colorName, colorMessage){
     const li = document.createElement('li');
     const nameSpan = document.createElement('span');
-    nameSpan.style.color = 'darkturquoise';
-    nameSpan.innerText = msg.name + ': ';
+    nameSpan.style.color = colorName;
+    nameSpan.innerText = name + ': ';
     li.appendChild(nameSpan);
     const messageSpan = document.createElement('span');
-    messageSpan.style.color = 'orange';
-    messageSpan.innerText = msg.content;
+    messageSpan.style.color = colorMessage;
+    messageSpan.innerText = message;
     li.appendChild(messageSpan);
     messageList.appendChild(li);
+}
+
+socket.on('message', (msg) => {
+    pushScreenMessage(msg.name, msg.content, 'darkturquoise', 'orange');
+});
+
+socket.on('exit', (userName) => {
+    pushScreenMessage(userName, ' has left room!', 'gray', 'gray');
 });
 
 messageInput.onkeydown = (e) => {

@@ -7,10 +7,25 @@
                 text-align: center;
                 background-color: #ec9646;
             }
+            .chatDiv{
+                background: black;
+                text-align: center;
+            }
+            .inputDiv{
+                background-color: gray;
+            }
         </style>
     </head>
     <body>
         <h1>Node Chat</h1>
+        <div class="charDiv">
+            <ul id="messageList">
+            </ul>
+        </div>
+        <div class="inputDiv">
+            <input type="text" id="messageInput">
+            <button id="messageButton">Submit</button>
+        </div>
         <script src="/socket.io/socket.io.js"></script>
         <script src="main.js" type="text/javascript"></script>
     </body>

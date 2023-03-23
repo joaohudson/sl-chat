@@ -9,7 +9,7 @@ class Chat{
         console.log('User [' + socket.id + '] connected!');
         this.users[socket.id] = socket;
         socket.on('disconnect', () => this.#onDisconnect(socket));
-        socket.on('message', (message) => this.#onMenssage(message));
+        socket.on('message', (message) => this.#onMenssage(socket.id, message));
     }
 
     #onDisconnect(socket){
@@ -17,10 +17,10 @@ class Chat{
         delete this.users[socket.id];
     }
 
-    #onMenssage(message){
+    #onMenssage(from, message){
         for(const id of Object.keys(this.users)){
             const user = this.users[id];
-            user.emit('message', message);
+            user.emit('message', '[' + from + ']: ' + message);
         }
     }
 }

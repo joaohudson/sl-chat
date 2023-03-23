@@ -9,6 +9,27 @@ const [h1] = document.getElementsByTagName('h1');
 const [h2] = document.getElementsByTagName('h2');
 
 const socket = io();
+
+function sendMessage(){
+    if(!messageInput.value){
+        return;
+    }
+    socket.emit('message', messageInput.value);
+    messageInput.value = '';
+}
+
+function setup(){
+    if(!nameInput.value){
+        return;
+    }
+    socket.emit('setup', {name: nameInput.value});
+    h1.innerText = 'Node Chat';
+    h2.innerText = 'Profile: ' + nameInput.value;
+    nameInput.value = '';
+    setupDiv.style.display = 'none';
+    chatDiv.style.display = 'block';
+}
+
 socket.on('message', (msg) => {
     const li = document.createElement('li');
     li.innerText = msg.name + ' - ' + msg.content;
@@ -18,33 +39,20 @@ socket.on('message', (msg) => {
 messageInput.onkeydown = (e) => {
     if(e.key == 'Enter'){
         e.preventDefault();
-        socket.emit('message', messageInput.value);
-        messageInput.value = '';
+        sendMessage();
     }
 }
 
 messageButton.onclick = () =>{
-    socket.emit('message', messageInput.value);
-    messageInput.value = '';
+    sendMessage();
 };
 
 nameButton.onclick = () => {
-    socket.emit('setup', {name: nameInput.value});
-    h1.innerText = 'Node Chat';
-    h2.innerText = 'Profile: ' + nameInput.value;
-    nameInput.value = '';
-    setupDiv.style.display = 'none';
-    chatDiv.style.display = 'block';
+    setup();
 }
 
 nameInput.onkeydown = (e) => {
     if(e.key == 'Enter'){
-        e.preventDefault();
-        socket.emit('setup', {name: nameInput.value});
-        h1.innerText = 'Node Chat';
-        h2.innerText = 'Profile: ' + nameInput.value;
-        nameInput.value = '';
-        setupDiv.style.display = 'none';
-        chatDiv.style.display = 'block';
+        setup();
     }
 }

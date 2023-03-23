@@ -16,7 +16,7 @@
             .verticalSpace{
                 margin-top: 60px;
             }
-            .chatDiv{
+            .messageDiv{
                 background: black;
                 text-align: center;
                 color: darkturquoise;
@@ -30,23 +30,28 @@
                 margin-right: 20%;
                 margin-left: 20%;
             }
+            #chatDiv{
+                display: none;
+            }
         </style>
     </head>
     <body>
         <h2>Setup Name</h2>
-        <div class="inputDiv">
+        <div id="setupDiv" class="inputDiv">
             <input type="text" id="nameInput">
             <button id="nameButton">Submit</button>
         </div>
         <div class="verticalSpace"></div>
-        <h1>Node Chat</h1>
-        <div class="chatDiv">
-            <ul id="messageList">
-            </ul>
-        </div>
-        <div class="inputDiv">
-            <input type="text" id="messageInput">
-            <button id="messageButton">Submit</button>
+        <div id="chatDiv">
+            <h1>Node Chat</h1>
+            <div class="messageDiv">
+                <ul id="messageList">
+                </ul>
+            </div>
+            <div class="inputDiv">
+                <input type="text" id="messageInput">
+                <button id="messageButton">Submit</button>
+            </div>
         </div>
         <script src="/socket.io/socket.io.js"></script>
         <script src="main.js" type="text/javascript"></script>

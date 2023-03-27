@@ -52,14 +52,28 @@
         </style>
     </head>
     <body>
-        <h1>Setup Name</h1>
+        <h1>Setup</h1>
         <div id="setupDiv" class="inputDiv">
-            <input type="text" id="nameInput" class="textInput">
+            <div>
+                <label>Room ID</label>
+            </div>
+            <div>
+                <input type="text" id="roomIdInput" class="textInput">
+            </div>
+            <div>
+                <label>Name</label>
+            </div>
+            <div>
+                <input type="text" id="nameInput" class="textInput">
+            </div>
             <button id="nameButton">Ok</button>
         </div>
         <div class="verticalSpace"></div>
         <div id="chatDiv">
             <h2></h2>
+            <div>
+                <label id="roomLabel"></label>
+            </div>
             <div class="messageDiv">
                 <ul id="messageList">
                 </ul>

@@ -4,6 +4,9 @@
         <meta charset="utf-8">
         <title>Node Chat</title>
         <style>
+            *{
+                outline: none;
+            }
             body{
                 text-align: center;
                 background-color: #ec9646;
@@ -12,6 +15,16 @@
                 list-style-type: none;
             }
             div{
+                border-radius: 25px;
+            }
+            button{
+                background-color: black;
+                color: orange;
+                border-radius: 25px;
+            }
+            .textInput{
+                background-color: black;
+                color: orange;
                 border-radius: 25px;
             }
             .verticalSpace{
@@ -41,8 +54,8 @@
     <body>
         <h1>Setup Name</h1>
         <div id="setupDiv" class="inputDiv">
-            <input type="text" id="nameInput">
-            <button id="nameButton">Submit</button>
+            <input type="text" id="nameInput" class="textInput">
+            <button id="nameButton">Ok</button>
         </div>
         <div class="verticalSpace"></div>
         <div id="chatDiv">
@@ -52,8 +65,8 @@
                 </ul>
             </div>
             <div class="inputDiv">
-                <input type="text" id="messageInput">
-                <button id="messageButton">Submit</button>
+                <input type="text" id="messageInput" class="textInput">
+                <button id="messageButton">Send</button>
             </div>
         </div>
         <script src="/socket.io/socket.io.js"></script>

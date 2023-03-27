@@ -21,6 +21,14 @@ class Chat{
         this.io.on('connection', (socket) => this.#onConnection(socket));
     }
 
+    getUsersCount(){
+        return Object.keys(this.users).length;
+    }
+
+    getRoomCount(){
+        return Object.keys(this.rooms).length;
+    }
+
     #createUser(socket){
         let {userName, roomId, roomTitle} = socket.handshake.auth;
         if(!userName){

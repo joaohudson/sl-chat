@@ -44,7 +44,8 @@ function pushScreenMessage(name, message, colorName, colorMessage){
 }
 
 socket.on('message', (msg) => {
-    pushScreenMessage(msg.name, msg.content, 'darkturquoise', 'orange');
+    const userColor =  msg.id == socket.id ? 'darkturquoise' : 'white';
+    pushScreenMessage(msg.name, msg.content, userColor, 'orange');
 });
 
 socket.on('exit', (userName) => {

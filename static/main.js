@@ -24,7 +24,6 @@ function sendMessage(socket){
     }
     socket.emit('message', messageInput.value);
     messageInput.value = '';
-    console.log('aqui');
 }
 
 function setup(){

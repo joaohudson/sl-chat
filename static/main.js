@@ -4,11 +4,15 @@ const messageButton = document.getElementById('messageButton');
 const nameInput = document.getElementById('nameInput');
 const nameButton = document.getElementById('nameButton');
 const roomIdInput = document.getElementById('roomIdInput');
+const roomTitleInput = document.getElementById('roomTitleInput');
 const setupDiv = document.getElementById('setupDiv');
 const chatDiv = document.getElementById('chatDiv');
 const [h1] = document.getElementsByTagName('h1');
 const [h2] = document.getElementsByTagName('h2');
 const roomLabel = document.getElementById('roomLabel');
+const createRoomCheckbox = document.getElementById('createRoomCheckbox');
+const createRoomDiv = document.getElementById('createRoomDiv');
+const loginRoomDiv = document.getElementById('loginRoomDiv');
 
 function sendMessage(socket){
     if(!messageInput.value){
@@ -23,7 +27,21 @@ function setup(){
     if(!nameInput.value){
         return;
     }
-    const socket = io({auth: {userName: nameInput.value, roomTitle: 'teste', roomId: roomIdInput.value}});
+    const createRoom = createRoomCheckbox.checked;
+    const loginRequest = {userName: nameInput.value};
+    if(createRoom){
+        if(!roomTitleInput.value){
+            return;
+        }
+        loginRequest.roomTitle = roomTitleInput.value;
+    }else{
+        if(!roomIdInput.value){
+            return;
+        }
+        loginRequest.roomId = roomIdInput.value;
+    }
+    
+    const socket = io({auth: loginRequest});
     h1.innerText = 'Node Chat';
     h2.innerText = 'Profile: ' + nameInput.value;
     nameInput.value = '';
@@ -41,6 +59,10 @@ function setup(){
     
     socket.on('exit', (userName) => {
         pushScreenMessage(userName, ' has left room!', 'gray', 'gray');
+    });
+
+    socket.on('connect_error', (error) => {
+        alert(error);
     });
 
     messageInput.onkeydown = (e) => {
@@ -75,5 +97,16 @@ nameButton.onclick = () => {
 nameInput.onkeydown = (e) => {
     if(e.key == 'Enter'){
         setup();
+    }
+}
+
+createRoomCheckbox.onclick = () => {
+    const create = createRoomCheckbox.checked;
+    if(create){
+        createRoomDiv.style.display = 'block';
+        loginRoomDiv.style.display = 'none';
+    }else{
+        createRoomDiv.style.display = 'none';
+        loginRoomDiv.style.display = 'block';
     }
 }

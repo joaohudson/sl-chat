@@ -29,6 +29,8 @@ class Chat{
         if(!roomId){
             roomId = uuid();
             this.rooms[roomId] = {users: {}, title: roomTitle};
+        }else if(!this.rooms[roomId]){
+            throw new Error(ERROR_AUTH);
         }
         const user = new User(socket, userName, roomId);
         this.users[socket.id] = user;

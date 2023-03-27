@@ -55,10 +55,24 @@
         <h1>Setup</h1>
         <div id="setupDiv" class="inputDiv">
             <div>
-                <label>Room ID</label>
+                <label>Create</label>
+                <input id="createRoomCheckbox" type="checkbox" checked="true">
             </div>
-            <div>
-                <input type="text" id="roomIdInput" class="textInput">
+            <div id="createRoomDiv">
+                <div>
+                    <label>Room Title</label>
+                </div>
+                <div>
+                    <input type="text" id="roomTitleInput" class="textInput">
+                </div>
+            </div>
+            <div id="loginRoomDiv" style="display: none;">
+                <div>
+                    <label>Room ID</label>
+                </div>
+                <div>
+                    <input type="text" id="roomIdInput" class="textInput">
+                </div>
             </div>
             <div>
                 <label>Name</label>

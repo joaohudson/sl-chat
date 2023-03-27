@@ -9,10 +9,14 @@ const setupDiv = document.getElementById('setupDiv');
 const chatDiv = document.getElementById('chatDiv');
 const [h1] = document.getElementsByTagName('h1');
 const [h2] = document.getElementsByTagName('h2');
-const roomLabel = document.getElementById('roomLabel');
+const [h3] = document.getElementsByTagName('h3');
+const roomIdLabel = document.getElementById('roomIdLabel');
 const createRoomCheckbox = document.getElementById('createRoomCheckbox');
 const createRoomDiv = document.getElementById('createRoomDiv');
 const loginRoomDiv = document.getElementById('loginRoomDiv');
+
+//state
+let roomId;
 
 function sendMessage(socket){
     if(!messageInput.value){
@@ -49,7 +53,9 @@ function setup(){
     chatDiv.style.display = 'block';
 
     socket.on('room-info', (room) => {
-        roomLabel.innerText = 'Room: ' + room.title + '\nRoom ID: ' + room.id;
+        roomId = room.id;
+        roomIdLabel.innerText = 'ID: ' + room.id;
+        h3.innerText = 'Room: ' + room.title;
     });
 
     socket.on('message', (msg) => {
@@ -109,4 +115,8 @@ createRoomCheckbox.onclick = () => {
         createRoomDiv.style.display = 'none';
         loginRoomDiv.style.display = 'block';
     }
+}
+
+roomIdLabel.onclick = () => {
+    navigator.clipboard.writeText(roomId);
 }

@@ -28,7 +28,7 @@
                 border-radius: 25px;
             }
             .verticalSpace{
-                margin-top: 60px;
+                margin-top: 30px;
             }
             .messageDiv{
                 background: black;
@@ -48,6 +48,12 @@
             }
             #chatDiv{
                 display: none;
+            }
+            #roomIdLabel{
+                user-select: none;
+            }
+            #roomIdLabel:hover{
+                cursor: pointer;
             }
         </style>
     </head>
@@ -86,7 +92,8 @@
         <div id="chatDiv">
             <h2></h2>
             <div>
-                <label id="roomLabel"></label>
+                <h3></h3>
+                <label id="roomIdLabel"></label>
             </div>
             <div class="messageDiv">
                 <ul id="messageList">

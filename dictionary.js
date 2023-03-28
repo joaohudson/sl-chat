@@ -2,20 +2,20 @@ const languages = require('./lang/index.json');
 
 class Dictionary{
     constructor(){
-        this.languages = {};
+        this.dictionaries = {};
         for(const lang of languages){
-            this.languages[lang.name] = require('./lang/' + lang.path);
+            this.dictionaries[lang.name] = require('./lang/' + lang.path);
         }
     }
 
     get(langs){
         for(const {code} of langs){
-            if(this.languages[code]){
-                return this.languages[code];
+            if(this.dictionaries[code]){
+                return this.dictionaries[code];
             }
         }
 
-        return this.languages[languages[0].name];
+        return this.dictionaries[languages[0].name];
     }
 }
 

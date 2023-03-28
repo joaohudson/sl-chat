@@ -86,11 +86,11 @@ function setup(){
     
     socket.on('enterer', (user) => {
         const name = user.id == socket.id ? dictionary.You : user.name;
-        pushScreenMessage(name, ' ' + dictionary.enteredRoom + '!', 'gray', 'gray');
+        pushScreenMessage(name, ' ' + dictionary.enteredRoom, 'gray', 'gray');
     });
 
     socket.on('exit', (user) => {
-        pushScreenMessage(user.name, ' ' + dictionary.hasLeftRoom + '!', 'gray', 'gray');
+        pushScreenMessage(user.name, ' ' + dictionary.hasLeftRoom, 'gray', 'gray');
     });
 
     socket.on('connect_error', (error) => {

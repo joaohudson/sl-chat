@@ -95,6 +95,7 @@ function setup(){
 
     socket.on('connect_error', (error) => {
         alert(error);
+        location.reload();
     });
 
     messageInput.onkeydown = (e) => {

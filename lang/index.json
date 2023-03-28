@@ -1,11 +1,11 @@
 [
     {
-        "name": "pt",
-        "path": "pt.json"
-    },
-    {
         "name": "en",
         "path": "en.json"
+    },
+    {
+        "name": "pt",
+        "path": "pt.json"
     },
     {
         "name": "es",

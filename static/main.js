@@ -30,7 +30,7 @@ const dictionary = await dictionaryResponse.json();
 
 //setup page
 h1.innerText = dictionary.Setup;
-roomIdLabel.innerText = dictionary.RoomId;
+roomIdLabel.title = dictionary.roomIdTooltip;
 createRoomLabel.innerText = dictionary.CreateRoom;
 roomTitleLabel.innerText = dictionary.RoomTitle;
 userNameLabel.innerText = dictionary.UserName;

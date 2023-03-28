@@ -1,3 +1,5 @@
+(async function(){
+
 const messageList = document.getElementById('messageList');
 const messageInput = document.getElementById('messageInput');
 const messageButton = document.getElementById('messageButton');
@@ -14,6 +16,26 @@ const roomIdLabel = document.getElementById('roomIdLabel');
 const createRoomCheckbox = document.getElementById('createRoomCheckbox');
 const createRoomDiv = document.getElementById('createRoomDiv');
 const loginRoomDiv = document.getElementById('loginRoomDiv');
+const createRoomLabel = document.getElementById('createRoomLabel');
+const roomTitleLabel = document.getElementById('roomTitleLabel');
+const userNameLabel = document.getElementById('userNameLabel');
+const roomIdInputLabel = document.getElementById('roomIdInputLabel');
+
+const dictionaryResponse = await fetch('/api/lang');
+if(!dictionaryResponse.ok){
+    alert(await dictionaryResponse.text());
+    return;
+}
+const dictionary = await dictionaryResponse.json();
+
+//setup page
+h1.innerText = dictionary.Setup;
+roomIdLabel.innerText = dictionary.RoomId;
+createRoomLabel.innerText = dictionary.CreateRoom;
+roomTitleLabel.innerText = dictionary.RoomTitle;
+userNameLabel.innerText = dictionary.UserName;
+roomIdInputLabel.innerText = dictionary.RoomId;
+messageButton.innerText = dictionary.Send;
 
 //state
 let roomId;
@@ -46,7 +68,7 @@ function setup(){
     
     const socket = io({auth: loginRequest});
     h1.innerText = 'Node Chat';
-    h2.innerText = 'Profile: ' + nameInput.value;
+    h2.innerText = dictionary.Profile + ': ' + nameInput.value;
     nameInput.value = '';
     setupDiv.style.display = 'none';
     chatDiv.style.display = 'block';
@@ -54,7 +76,7 @@ function setup(){
     socket.on('room-info', (room) => {
         roomId = room.id;
         roomIdLabel.innerText = 'ID: ' + room.id;
-        h3.innerText = 'Room: ' + room.title;
+        h3.innerText = dictionary.Room + ': ' + room.title;
     });
 
     socket.on('message', (msg) => {
@@ -63,12 +85,12 @@ function setup(){
     });
     
     socket.on('enterer', (user) => {
-        const name = user.id == socket.id ? 'You' : user.name;
-        pushScreenMessage(name, ' entered the room!', 'gray', 'gray');
+        const name = user.id == socket.id ? dictionary.You : user.name;
+        pushScreenMessage(name, ' ' + dictionary.enteredRoom + '!', 'gray', 'gray');
     });
 
     socket.on('exit', (user) => {
-        pushScreenMessage(user.name, ' has left room!', 'gray', 'gray');
+        pushScreenMessage(user.name, ' ' + dictionary.hasLeftRoom + '!', 'gray', 'gray');
     });
 
     socket.on('connect_error', (error) => {
@@ -124,3 +146,5 @@ createRoomCheckbox.onclick = () => {
 roomIdLabel.onclick = () => {
     navigator.clipboard.writeText(roomId);
 }
+
+}());

@@ -22,13 +22,20 @@
                 color: orange;
                 border-radius: 25px;
             }
+            label{
+                font-weight: bold;
+            }
             .textInput{
                 background-color: black;
                 color: orange;
                 border-radius: 25px;
+                text-align: center;
             }
             .verticalSpace{
                 margin-top: 30px;
+            }
+            .tinyVerticalSpace{
+                margin-top: 15px;
             }
             .messageDiv{
                 background: black;
@@ -61,8 +68,9 @@
         <h1>Setup</h1>
         <div id="setupDiv" class="inputDiv">
             <div>
-                <label>Create</label>
+                <label>Create Room</label>
                 <input id="createRoomCheckbox" type="checkbox" checked="true">
+                <div class="tinyVerticalSpace"></div>
             </div>
             <div id="createRoomDiv">
                 <div>
@@ -72,6 +80,7 @@
                     <input type="text" id="roomTitleInput" class="textInput">
                 </div>
             </div>
+            <div class="tinyVerticalSpace"></div>
             <div id="loginRoomDiv" style="display: none;">
                 <div>
                     <label>Room ID</label>
@@ -80,12 +89,14 @@
                     <input type="text" id="roomIdInput" class="textInput">
                 </div>
             </div>
+            <div class="tinyVerticalSpace"></div>
             <div>
-                <label>Name</label>
+                <label>User Name</label>
             </div>
             <div>
                 <input type="text" id="nameInput" class="textInput">
             </div>
+            <div class="tinyVerticalSpace"></div>
             <button id="nameButton">Ok</button>
         </div>
         <div class="verticalSpace"></div>

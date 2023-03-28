@@ -1,6 +1,7 @@
 const uuid = require('uuid').v4;
 const { Message } = require('./message');
-const { User } = require('./user')
+const { User } = require('./user');
+const { Room } = require('./room');
 
 const ERROR_AUTH = 'Authentication error!';
 
@@ -36,7 +37,7 @@ class Chat{
         }
         if(!roomId){
             roomId = uuid();
-            this.rooms[roomId] = {users: {}, title: roomTitle};
+            this.rooms[roomId] = new Room(roomId, roomTitle);
         }else if(!this.rooms[roomId]){
             throw new Error(ERROR_AUTH);
         }
@@ -52,7 +53,7 @@ class Chat{
         
         const user = this.users[socket.id];
         const room = this.rooms[user.roomId];
-        socket.emit('room-info', {title: room.title, id: user.roomId});
+        socket.emit('room-info', room.dto());
         for(const id of Object.keys(room.users)){
             const other = room.users[id];
             other.socket.emit('enterer', user.dto());

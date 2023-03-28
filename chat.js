@@ -53,6 +53,10 @@ class Chat{
         const user = this.users[socket.id];
         const room = this.rooms[user.roomId];
         socket.emit('room-info', {title: room.title, id: user.roomId});
+        for(const id of Object.keys(room.users)){
+            const other = room.users[id];
+            other.socket.emit('enterer', user.dto());
+        }
     }
 
     #onDisconnect(socket){
@@ -62,7 +66,7 @@ class Chat{
         const room = this.rooms[roomId];
         for(const id of Object.keys(room.users)){
             const other = room.users[id];
-            other.socket.emit('exit', user.name);
+            other.socket.emit('exit', user.dto());
         }
         delete this.users[socket.id];
         delete room.users[socket.id];

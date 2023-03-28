@@ -62,8 +62,13 @@ function setup(){
         pushScreenMessage(msg.name, msg.content, userColor, 'orange');
     });
     
-    socket.on('exit', (userName) => {
-        pushScreenMessage(userName, ' has left room!', 'gray', 'gray');
+    socket.on('enterer', (user) => {
+        const name = user.id == socket.id ? 'You' : user.name;
+        pushScreenMessage(name, ' entered the room!', 'gray', 'gray');
+    });
+
+    socket.on('exit', (user) => {
+        pushScreenMessage(user.name, ' has left room!', 'gray', 'gray');
     });
 
     socket.on('connect_error', (error) => {

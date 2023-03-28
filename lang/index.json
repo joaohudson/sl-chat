@@ -6,5 +6,9 @@
     {
         "name": "en",
         "path": "en.json"
+    },
+    {
+        "name": "es",
+        "path": "es.json"
     }
 ]

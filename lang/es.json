@@ -1,0 +1,14 @@
+{
+    "enteredRoom": "entró en la habitación!",
+    "hasLeftRoom": "¡dejar la habitación!",
+    "You": "Tu",
+    "Profile": "Perfil",
+    "Room": "Habitación",
+    "CreateRoom": "Crear Habitación",
+    "RoomTitle": "Título de la Habitación",
+    "RoomId": "Identificación de la Habitación",
+    "UserName": "Nombre de Usuario",
+    "Setup": "Ajustes",
+    "Send": "Mandar",
+    "roomIdTooltip": "ID de la sala, haga clic para copiar."
+}

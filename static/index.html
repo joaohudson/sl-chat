@@ -35,6 +35,15 @@
             li{
                 word-wrap: break-word;
             }
+            h1{
+                font-weight: bold;
+                font-size: 30px;
+                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                text-shadow: 2px 2px 4px rgb(94, 147, 190);
+            }
+            button{
+                font-size: 12px;
+            }
             .textInput{
                 background-color: black;
                 color: orange;
@@ -46,6 +55,12 @@
             }
             .tinyVerticalSpace{
                 margin-top: 15px;
+            }
+            .horizontalSeparator{
+                margin-left: 15px;
+                margin-right: 15px;
+                font-weight: bold;
+                font-size: 20px;
             }
             .messageDiv{
                 background: black;
@@ -62,6 +77,9 @@
                 margin-top: 5px;
                 margin-right: 20%;
                 margin-left: 20%;
+            }
+            .message{
+                font-size: 14px;
             }
             #chatDiv{
                 display: none;
@@ -112,9 +130,13 @@
         <div class="verticalSpace"></div>
         <div id="chatDiv">
             <h2></h2>
+            <label id="roomNameLabel"></label>
+            <span class="horizontalSeparator">|</span>
+            <label id="profileNameLabel"></label>
+            <div class="tinyVerticalSpace"></div>
             <div>
-                <h3></h3>
-                <label id="roomIdLabel"></label>
+                <button id="roomIdCopyButton" disabled="true">Copy Room ID</button>
+                <div class="tinyVerticalSpace"></div>
             </div>
             <div class="messageDiv">
                 <ul id="messageList">

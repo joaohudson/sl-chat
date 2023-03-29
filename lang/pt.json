@@ -10,5 +10,5 @@
     "UserName": "Nome do Usuário",
     "Setup": "Configuração",
     "Send": "Enviar",
-    "roomIdTooltip": "ID da sala, clique para copiar."
+    "roomIdCopy": "Copiar ID da Sala"
 }

@@ -10,5 +10,5 @@
     "UserName": "User Name",
     "Setup": "Setup",
     "Send": "Send",
-    "roomIdTooltip": "Room ID, click to copy."
+    "roomIdCopy": "Copy Room ID"
 }

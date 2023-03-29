@@ -6,9 +6,9 @@
     "Room": "Habitación",
     "CreateRoom": "Crear Habitación",
     "RoomTitle": "Título de la Habitación",
-    "RoomId": "Identificación de la Habitación",
+    "RoomId": "ID de la Habitación",
     "UserName": "Nombre de Usuario",
     "Setup": "Ajustes",
     "Send": "Mandar",
-    "roomIdTooltip": "ID de la sala, haga clic para copiar."
+    "roomIdCopy": "Copiar ID de la Habitación"
 }

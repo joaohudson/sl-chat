@@ -10,9 +10,7 @@ const roomTitleInput = document.getElementById('roomTitleInput');
 const setupDiv = document.getElementById('setupDiv');
 const chatDiv = document.getElementById('chatDiv');
 const [h1] = document.getElementsByTagName('h1');
-const [h2] = document.getElementsByTagName('h2');
-const [h3] = document.getElementsByTagName('h3');
-const roomIdLabel = document.getElementById('roomIdLabel');
+const roomIdCopyButton = document.getElementById('roomIdCopyButton');
 const createRoomCheckbox = document.getElementById('createRoomCheckbox');
 const createRoomDiv = document.getElementById('createRoomDiv');
 const loginRoomDiv = document.getElementById('loginRoomDiv');
@@ -20,6 +18,8 @@ const createRoomLabel = document.getElementById('createRoomLabel');
 const roomTitleLabel = document.getElementById('roomTitleLabel');
 const userNameLabel = document.getElementById('userNameLabel');
 const roomIdInputLabel = document.getElementById('roomIdInputLabel');
+const profileNameLabel = document.getElementById('profileNameLabel');
+const roomNameLabel = document.getElementById('roomNameLabel');
 
 const dictionaryResponse = await fetch('/api/lang');
 if(!dictionaryResponse.ok){
@@ -30,9 +30,9 @@ const dictionary = await dictionaryResponse.json();
 
 //setup page
 h1.innerText = dictionary.Setup;
-roomIdLabel.title = dictionary.roomIdTooltip;
 createRoomLabel.innerText = dictionary.CreateRoom;
 roomTitleLabel.innerText = dictionary.RoomTitle;
+roomIdCopyButton.innerText = dictionary.roomIdCopy;
 userNameLabel.innerText = dictionary.UserName;
 roomIdInputLabel.innerText = dictionary.RoomId;
 messageButton.innerText = dictionary.Send;
@@ -68,15 +68,15 @@ function setup(){
     
     const socket = io({auth: loginRequest});
     h1.innerText = 'Node Chat';
-    h2.innerText = dictionary.Profile + ': ' + nameInput.value;
+    profileNameLabel.innerText = dictionary.Profile + ': ' + nameInput.value;
     nameInput.value = '';
     setupDiv.style.display = 'none';
     chatDiv.style.display = 'block';
 
     socket.on('room-info', (room) => {
         roomId = room.id;
-        roomIdLabel.innerText = 'ID: ' + room.id;
-        h3.innerText = dictionary.Room + ': ' + room.title;
+        roomIdCopyButton.disabled = false;
+        roomNameLabel.innerText = dictionary.Room + ': ' + room.title;
     });
 
     socket.on('message', (msg) => {
@@ -113,10 +113,12 @@ function setup(){
 function pushScreenMessage(name, message, colorName, colorMessage){
     const li = document.createElement('li');
     const nameSpan = document.createElement('span');
+    nameSpan.className = 'message';
     nameSpan.style.color = colorName;
     nameSpan.innerText = name + ': ';
     li.appendChild(nameSpan);
     const messageSpan = document.createElement('span');
+    messageSpan.className = 'message';
     messageSpan.style.color = colorMessage;
     messageSpan.innerText = message;
     li.appendChild(messageSpan);
@@ -144,7 +146,7 @@ createRoomCheckbox.onclick = () => {
     }
 }
 
-roomIdLabel.onclick = () => {
+roomIdCopyButton.onclick = () => {
     navigator.clipboard.writeText(roomId);
 }
 

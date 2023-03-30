@@ -20,6 +20,7 @@ const userNameLabel = document.getElementById('userNameLabel');
 const roomIdInputLabel = document.getElementById('roomIdInputLabel');
 const profileNameLabel = document.getElementById('profileNameLabel');
 const roomNameLabel = document.getElementById('roomNameLabel');
+const clearChatButton = document.getElementById('clearChatButton');
 
 const dictionaryResponse = await fetch('/api/lang');
 if(!dictionaryResponse.ok){
@@ -36,6 +37,7 @@ roomIdCopyButton.innerText = dictionary.roomIdCopy;
 userNameLabel.innerText = dictionary.UserName;
 roomIdInputLabel.innerText = dictionary.RoomId;
 messageButton.innerText = dictionary.Send;
+clearChatButton.innerText = dictionary.clearChat;
 
 //state
 let roomId;
@@ -148,6 +150,10 @@ createRoomCheckbox.onclick = () => {
 
 roomIdCopyButton.onclick = () => {
     navigator.clipboard.writeText(roomId);
+}
+
+clearChatButton.onclick = () => {
+    messageList.innerText = '';
 }
 
 }());

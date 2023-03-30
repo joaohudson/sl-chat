@@ -10,5 +10,6 @@
     "UserName": "User Name",
     "Setup": "Setup",
     "Send": "Send",
-    "roomIdCopy": "Copy Room ID"
+    "roomIdCopy": "Copy Room ID",
+    "clearChat": "Clear Chat"
 }

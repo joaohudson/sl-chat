@@ -1,6 +1,7 @@
 (async function(){
 
 const messageList = document.getElementById('messageList');
+const messageDiv = document.getElementById('messageDiv');
 const messageInput = document.getElementById('messageInput');
 const messageButton = document.getElementById('messageButton');
 const nameInput = document.getElementById('nameInput');
@@ -125,6 +126,7 @@ function pushScreenMessage(name, message, colorName, colorMessage){
     messageSpan.innerText = message;
     li.appendChild(messageSpan);
     messageList.appendChild(li);
+    messageDiv.scrollTop = messageDiv.scrollHeight;
 }
 
 nameButton.onclick = () => {

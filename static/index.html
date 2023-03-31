@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
         <title>Node Chat</title>
         <style>
             *{
@@ -26,6 +27,7 @@
             }
             label{
                 font-weight: bold;
+                font-size: 14px;
             }
             ul{
                 text-align: center;
@@ -90,6 +92,27 @@
             }
             #roomIdLabel:hover{
                 cursor: pointer;
+            }
+            /*for mobile*/
+            @media only screen and (max-width: 600px){
+                h1{
+                    font-size: 40px;
+                }
+                label{
+                    font-size: 16px;
+                }
+                button{
+                    font-size: 14px;
+                }
+                .inputDiv{
+                    font-size: 16px;
+                }
+                .verticalSpace{
+                    margin-top: 30px;
+                }
+                .tinyVerticalSpace{
+                    margin-top: 20px;
+                }
             }
         </style>
     </head>

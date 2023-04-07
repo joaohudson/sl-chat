@@ -41,7 +41,7 @@ userNameLabel.innerText = dictionary.UserName;
 roomIdInputLabel.innerText = dictionary.RoomId;
 messageButton.innerText = dictionary.Send;
 clearChatButton.innerText = dictionary.clearChat;
-imageLabel.innerText = dictionary.Image;
+imageLabel.innerText = dictionary.Media;
 
 //state
 let roomId;
@@ -58,8 +58,10 @@ async function sendImage(socket){
     if(!imageInput.files.length){
         return;
     }
-    const imageData = await readFile(imageInput.files[0]);
-    socket.emit('message', {content: imageData, type: 'image'});
+    const [file] = imageInput.files;
+    const imageData = await readFile(file);
+    const [type] = file.type.split('/');
+    socket.emit('message', {content: imageData, type});
     imageInput.value = '';
 }
 
@@ -94,12 +96,16 @@ function setup(){
         roomNameLabel.innerText = dictionary.Room + ': ' + room.title;
     });
 
-    socket.on('message', (msg) => {
+    socket.on('message', async (msg) => {
         const userColor =  msg.id == socket.id ? 'darkturquoise' : 'white';
         switch(msg.type){
             case 'image':
-                pushImageMessage(msg.name, msg.content, userColor);
-            break;
+                await pushImageMessage(msg.name, msg.content, userColor);
+                break;
+
+            case 'video':
+                await pushVideoMessage(msg.name, msg.content, userColor);
+                break;
 
             case 'text':
                 pushScreenMessage(msg.name, msg.content, userColor, 'orange');
@@ -137,7 +143,7 @@ function setup(){
     }
 }
 
-function pushImageMessage(name, base64, colorName){
+async function pushImageMessage(name, base64, colorName){
     const li = document.createElement('li');
     const nameSpan = document.createElement('span');
     nameSpan.className = 'message';
@@ -147,9 +153,27 @@ function pushImageMessage(name, base64, colorName){
     const imgDiv = document.createElement('div');
     const img = document.createElement('img');
     img.className = 'imageMessage';
-    img.src = base64;
+    img.src = await base64ToBlobUrl(base64);
     imgDiv.appendChild(img);
     li.appendChild(imgDiv);
+    messageList.appendChild(li);
+    messageDiv.scrollTop = messageDiv.scrollHeight;
+}
+
+async function pushVideoMessage(name, base64, colorName){
+    const li = document.createElement('li');
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'message';
+    nameSpan.style.color = colorName;
+    nameSpan.innerText = name + ': ';
+    li.appendChild(nameSpan);
+    const videoDiv = document.createElement('div');
+    const video = document.createElement('video');
+    video.className = 'imageMessage';
+    video.controls = true;
+    video.src = await base64ToBlobUrl(base64);
+    videoDiv.appendChild(video);
+    li.appendChild(videoDiv);
     messageList.appendChild(li);
     messageDiv.scrollTop = messageDiv.scrollHeight;
 }
@@ -211,6 +235,19 @@ async function readFile(file){
     });
     reader.readAsDataURL(file);
     return promise;
+}
+
+async function base64ToBlobUrl(base64){
+    const blob = await base64ToBlob(base64);
+    return URL.createObjectURL(blob);
+}
+
+async function base64ToBlob(base64){
+    const response = await fetch(base64);
+    if(!response.ok){
+        throw new Error(await response.text());
+    }
+    return await response.blob();
 }
 
 }());

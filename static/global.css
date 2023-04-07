@@ -75,6 +75,10 @@ h1{
 .message{
     font-size: 14px;
 }
+.imageMessage{
+    width: 50%;
+    height: auto;
+}
 .messageInput{
     text-align: start;
 }

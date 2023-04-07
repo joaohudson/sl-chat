@@ -22,6 +22,7 @@ const roomIdInputLabel = document.getElementById('roomIdInputLabel');
 const profileNameLabel = document.getElementById('profileNameLabel');
 const roomNameLabel = document.getElementById('roomNameLabel');
 const clearChatButton = document.getElementById('clearChatButton');
+const imageInput = document.getElementById('imageInput');
 
 const dictionaryResponse = await fetch('/api/lang');
 if(!dictionaryResponse.ok){
@@ -47,8 +48,16 @@ function sendMessage(socket){
     if(!messageInput.value){
         return;
     }
-    socket.emit('message', messageInput.value);
+    socket.emit('message', {content: messageInput.value, typ: 'text'});
     messageInput.value = '';
+}
+
+async function sendImage(socket){
+    if(!imageInput.files.length){
+        return;
+    }
+    const imageData = await readFile(imageInput.files[0]);
+    socket.emit('message', {content: imageData, type: 'image'});
 }
 
 function setup(){
@@ -84,7 +93,15 @@ function setup(){
 
     socket.on('message', (msg) => {
         const userColor =  msg.id == socket.id ? 'darkturquoise' : 'white';
-        pushScreenMessage(msg.name, msg.content, userColor, 'orange');
+        switch(msg.type){
+            case 'image':
+                pushImageMessage(msg.name, msg.content, userColor);
+            break;
+
+            case 'text':
+                pushScreenMessage(msg.name, msg.content, userColor, 'orange');
+                break;
+        }
     });
     
     socket.on('enterer', (user) => {
@@ -101,16 +118,35 @@ function setup(){
         location.reload();
     });
 
-    messageInput.onkeydown = (e) => {
+    messageInput.onkeydown = async (e) => {
         if(e.key == 'Enter'){
             e.preventDefault();
             sendMessage(socket);
+            await sendImage(socket);
         }
     }
     
-    messageButton.onclick = () =>{
+    messageButton.onclick = async () =>{
         sendMessage(socket);
+        await sendImage(socket);
     };
+}
+
+function pushImageMessage(name, base64, colorName){
+    const li = document.createElement('li');
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'message';
+    nameSpan.style.color = colorName;
+    nameSpan.innerText = name + ': ';
+    li.appendChild(nameSpan);
+    const imgDiv = document.createElement('div');
+    const img = document.createElement('img');
+    img.className = 'imageMessage';
+    img.src = base64;
+    imgDiv.appendChild(img);
+    li.appendChild(imgDiv);
+    messageList.appendChild(li);
+    messageDiv.scrollTop = messageDiv.scrollHeight;
 }
 
 function pushScreenMessage(name, message, colorName, colorMessage){
@@ -156,6 +192,20 @@ roomIdCopyButton.onclick = () => {
 
 clearChatButton.onclick = () => {
     messageList.innerText = '';
+}
+
+async function readFile(file){
+    const reader = new FileReader();
+    const promise = new Promise((res, rej) => {
+        reader.onloadend = () => {
+            res(reader.result);
+        };
+        reader.onerror = (error) => {
+            rej(error);
+        }
+    });
+    reader.readAsDataURL(file);
+    return promise;
 }
 
 }());

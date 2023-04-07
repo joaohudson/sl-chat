@@ -48,11 +48,12 @@ class Chat{
 
     #onConnection(socket){
         console.log('User [' + socket.id + '] connected!');
-        socket.on('disconnect', () => this.#onDisconnect(socket));
-        socket.on('message', (message) => this.#onMenssage(this.users[socket.id], message));
-        
         const user = this.users[socket.id];
         const room = this.rooms[user.roomId];
+        
+        socket.on('disconnect', () => this.#onDisconnect(socket));
+        socket.on('message', (request) => this.#onMenssage(user, request));
+        
         socket.emit('room-info', room.dto());
         for(const id of Object.keys(room.users)){
             const other = room.users[id];
@@ -76,11 +77,12 @@ class Chat{
         }
     }
 
-    #onMenssage(from, message){
-        const room = this.rooms[from.roomId];
+    #onMenssage(sender, request){
+        const {content, type} = request;
+        const room = this.rooms[sender.roomId];
         for(const id of Object.keys(room.users)){
             const user = this.users[id];
-            user.socket.emit('message', new Message(from.socket.id, from.name, message));
+            user.socket.emit('message', new Message(sender.socket.id, sender.name, content, type));
         }
     }
 }

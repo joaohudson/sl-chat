@@ -41,7 +41,7 @@ userNameLabel.innerText = dictionary.UserName;
 roomIdInputLabel.innerText = dictionary.RoomId;
 messageButton.innerText = dictionary.Send;
 clearChatButton.innerText = dictionary.clearChat;
-imageLabel.innerText = dictionary.Image;
+imageLabel.innerText = dictionary.Media;
 
 //state
 let roomId;
@@ -58,8 +58,10 @@ async function sendImage(socket){
     if(!imageInput.files.length){
         return;
     }
-    const imageData = await readFile(imageInput.files[0]);
-    socket.emit('message', {content: imageData, type: 'image'});
+    const [file] = imageInput.files;
+    const imageData = await readFile(file);
+    const [type] = file.type.split('/');
+    socket.emit('message', {content: imageData, type});
     imageInput.value = '';
 }
 
@@ -99,7 +101,11 @@ function setup(){
         switch(msg.type){
             case 'image':
                 await pushImageMessage(msg.name, msg.content, userColor);
-            break;
+                break;
+
+            case 'video':
+                await pushVideoMessage(msg.name, msg.content, userColor);
+                break;
 
             case 'text':
                 pushScreenMessage(msg.name, msg.content, userColor, 'orange');
@@ -150,6 +156,24 @@ async function pushImageMessage(name, base64, colorName){
     img.src = await base64ToBlobUrl(base64);
     imgDiv.appendChild(img);
     li.appendChild(imgDiv);
+    messageList.appendChild(li);
+    messageDiv.scrollTop = messageDiv.scrollHeight;
+}
+
+async function pushVideoMessage(name, base64, colorName){
+    const li = document.createElement('li');
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'message';
+    nameSpan.style.color = colorName;
+    nameSpan.innerText = name + ': ';
+    li.appendChild(nameSpan);
+    const videoDiv = document.createElement('div');
+    const video = document.createElement('video');
+    video.className = 'imageMessage';
+    video.controls = true;
+    video.src = await base64ToBlobUrl(base64);
+    videoDiv.appendChild(video);
+    li.appendChild(videoDiv);
     messageList.appendChild(li);
     messageDiv.scrollTop = messageDiv.scrollHeight;
 }

@@ -107,6 +107,10 @@ function setup(){
                 await pushVideoMessage(msg.name, msg.content, userColor);
                 break;
 
+            case 'audio':
+                await pushAudioMessage(msg.name, msg.content, userColor);
+                break;
+
             case 'text':
                 pushScreenMessage(msg.name, msg.content, userColor, 'orange');
                 break;
@@ -174,6 +178,24 @@ async function pushVideoMessage(name, base64, colorName){
     video.src = await base64ToBlobUrl(base64);
     videoDiv.appendChild(video);
     li.appendChild(videoDiv);
+    messageList.appendChild(li);
+    messageDiv.scrollTop = messageDiv.scrollHeight;
+}
+
+async function pushAudioMessage(name, base64, colorName){
+    const li = document.createElement('li');
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'message';
+    nameSpan.style.color = colorName;
+    nameSpan.innerText = name + ': ';
+    li.appendChild(nameSpan);
+    const audioSpan = document.createElement('span');
+    const audio = document.createElement('audio');
+    audio.className = 'audioMessage';
+    audio.controls = true;
+    audio.src = await base64ToBlobUrl(base64);
+    audioSpan.appendChild(audio);
+    li.appendChild(audioSpan);
     messageList.appendChild(li);
     messageDiv.scrollTop = messageDiv.scrollHeight;
 }

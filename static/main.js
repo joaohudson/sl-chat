@@ -23,6 +23,7 @@ const profileNameLabel = document.getElementById('profileNameLabel');
 const roomNameLabel = document.getElementById('roomNameLabel');
 const clearChatButton = document.getElementById('clearChatButton');
 const imageInput = document.getElementById('imageInput');
+const imageLabel = document.getElementById('imageLabel');
 
 const dictionaryResponse = await fetch('/api/lang');
 if(!dictionaryResponse.ok){
@@ -40,6 +41,7 @@ userNameLabel.innerText = dictionary.UserName;
 roomIdInputLabel.innerText = dictionary.RoomId;
 messageButton.innerText = dictionary.Send;
 clearChatButton.innerText = dictionary.clearChat;
+imageLabel.innerText = dictionary.Image;
 
 //state
 let roomId;
@@ -48,7 +50,7 @@ function sendMessage(socket){
     if(!messageInput.value){
         return;
     }
-    socket.emit('message', {content: messageInput.value, typ: 'text'});
+    socket.emit('message', {content: messageInput.value, type: 'text'});
     messageInput.value = '';
 }
 
@@ -58,6 +60,7 @@ async function sendImage(socket){
     }
     const imageData = await readFile(imageInput.files[0]);
     socket.emit('message', {content: imageData, type: 'image'});
+    imageInput.value = '';
 }
 
 function setup(){
@@ -118,18 +121,20 @@ function setup(){
         location.reload();
     });
 
-    messageInput.onkeydown = async (e) => {
+    messageInput.onkeydown = (e) => {
         if(e.key == 'Enter'){
             e.preventDefault();
             sendMessage(socket);
-            await sendImage(socket);
         }
     }
     
-    messageButton.onclick = async () =>{
+    messageButton.onclick = () =>{
         sendMessage(socket);
-        await sendImage(socket);
     };
+
+    imageInput.onchange = async () => {
+        await sendImage(socket);
+    }
 }
 
 function pushImageMessage(name, base64, colorName){

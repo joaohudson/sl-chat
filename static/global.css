@@ -76,11 +76,23 @@ h1{
     font-size: 14px;
 }
 .imageMessage{
-    width: 50%;
+    width: 90%;
     height: auto;
 }
 .messageInput{
     text-align: start;
+}
+.imageInput{
+    visibility: hidden;
+    z-index: -1;
+    position: absolute;
+}
+.imageLabel{
+    background-color: black;
+    color: orange;
+    border-radius: 25px;
+    padding: 7px;
+    font-size: 12px;
 }
 /*for mobile*/
 @media only screen and (max-width: 600px){

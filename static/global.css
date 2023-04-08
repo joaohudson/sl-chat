@@ -81,7 +81,9 @@ h1{
 }
 .audioMessage{
     height: 26px;
+    width: 50%;
     border-radius: 25px;
+    margin-bottom: 8px;
     transform: translate(0, 8px);
 }
 .messageInput{

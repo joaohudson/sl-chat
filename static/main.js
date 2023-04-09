@@ -23,7 +23,7 @@ const profileNameLabel = document.getElementById('profileNameLabel');
 const roomNameLabel = document.getElementById('roomNameLabel');
 const clearChatButton = document.getElementById('clearChatButton');
 const mediaInput = document.getElementById('imageInput');
-const imageLabel = document.getElementById('imageLabel');
+const mediaLabel = document.getElementById('imageLabel');
 
 const dictionaryResponse = await fetch('/api/lang');
 if(!dictionaryResponse.ok){
@@ -41,7 +41,7 @@ userNameLabel.innerText = dictionary.UserName;
 roomIdInputLabel.innerText = dictionary.RoomId;
 messageButton.innerText = dictionary.Send;
 clearChatButton.innerText = dictionary.clearChat;
-imageLabel.innerText = dictionary.Media;
+mediaLabel.innerText = dictionary.Media;
 
 //state
 let roomId;
@@ -235,10 +235,10 @@ function setSending(sending){
     mediaInput.disabled = sending;
     if(sending){
         messageButton.innerText = '. . .';
-        imageLabel.innerText = '. . .';
+        mediaLabel.innerText = '. . .';
     }else{
         messageButton.innerText = dictionary.Send;
-        imageLabel.innerText = dictionary.Media;
+        mediaLabel.innerText = dictionary.Media;
     }
 }
 

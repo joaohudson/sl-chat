@@ -234,8 +234,8 @@ function setSending(sending){
     messageButton.disabled = sending;
     mediaInput.disabled = sending;
     if(sending){
-        messageButton.innerText = '...';
-        imageLabel.innerText = '...';
+        messageButton.innerText = '. . .';
+        imageLabel.innerText = '. . .';
     }else{
         messageButton.innerText = dictionary.Send;
         imageLabel.innerText = dictionary.Media;

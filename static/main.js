@@ -227,7 +227,7 @@ function pushScreenMessage(name, message, colorName, colorMessage){
 }
 
 function isSending(){
-    return !messageButton.disabled;
+    return messageButton.disabled;
 }
 
 function setSending(sending){

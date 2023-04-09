@@ -22,7 +22,7 @@ const roomIdInputLabel = document.getElementById('roomIdInputLabel');
 const profileNameLabel = document.getElementById('profileNameLabel');
 const roomNameLabel = document.getElementById('roomNameLabel');
 const clearChatButton = document.getElementById('clearChatButton');
-const imageInput = document.getElementById('imageInput');
+const mediaInput = document.getElementById('imageInput');
 const imageLabel = document.getElementById('imageLabel');
 
 const dictionaryResponse = await fetch('/api/lang');
@@ -50,19 +50,21 @@ function sendMessage(socket){
     if(!messageInput.value){
         return;
     }
+    setSending(true);
     socket.emit('message', {content: messageInput.value, type: 'text'});
     messageInput.value = '';
 }
 
-async function sendImage(socket){
-    if(!imageInput.files.length){
+async function sendMedia(socket){
+    if(!mediaInput.files.length){
         return;
     }
-    const [file] = imageInput.files;
+    setSending(true);
+    const [file] = mediaInput.files;
     const imageData = await readFile(file);
     const [type] = file.type.split('/');
     socket.emit('message', {content: imageData, type});
-    imageInput.value = '';
+    mediaInput.value = '';
 }
 
 function setup(){
@@ -97,7 +99,11 @@ function setup(){
     });
 
     socket.on('message', async (msg) => {
-        const userColor =  msg.id == socket.id ? 'darkturquoise' : 'white';
+        const mySocket = msg.id = socket.id; 
+        if(mySocket){
+            setSending(false);
+        }
+        const userColor =  mySocket ? 'darkturquoise' : 'white';
         switch(msg.type){
             case 'image':
                 await pushImageMessage(msg.name, msg.content, userColor);
@@ -116,6 +122,10 @@ function setup(){
                 break;
         }
     });
+
+    socket.on('disconnect', () => {
+        setSending(false);
+    });
     
     socket.on('enterer', (user) => {
         const name = user.id == socket.id ? dictionary.You : user.name;
@@ -132,7 +142,7 @@ function setup(){
     });
 
     messageInput.onkeydown = (e) => {
-        if(e.key == 'Enter'){
+        if(!isSending() && e.key == 'Enter'){
             e.preventDefault();
             sendMessage(socket);
         }
@@ -142,8 +152,8 @@ function setup(){
         sendMessage(socket);
     };
 
-    imageInput.onchange = async () => {
-        await sendImage(socket);
+    mediaInput.onchange = async () => {
+        await sendMedia(socket);
     }
 }
 
@@ -214,6 +224,22 @@ function pushScreenMessage(name, message, colorName, colorMessage){
     li.appendChild(messageSpan);
     messageList.appendChild(li);
     messageDiv.scrollTop = messageDiv.scrollHeight;
+}
+
+function isSending(){
+    return messageButton.enabled;
+}
+
+function setSending(sending){
+    messageButton.disabled = sending;
+    mediaInput.disabled = sending;
+    if(sending){
+        messageButton.innerText = '...';
+        imageLabel.innerText = '...';
+    }else{
+        messageButton.innerText = dictionary.Send;
+        imageLabel.innerText = dictionary.Media;
+    }
 }
 
 nameButton.onclick = () => {

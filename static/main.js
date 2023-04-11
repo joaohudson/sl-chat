@@ -43,19 +43,24 @@ messageButton.innerText = dictionary.Send;
 clearChatButton.innerText = dictionary.clearChat;
 mediaLabel.innerText = dictionary.Media;
 
+//utils
+function percent(current, max){
+    return Math.floor(current * 100 / max) + '%';
+}
+
 //state
+const mediaElements = new Map();
 let roomId;
 
 function sendMessage(socket){
     if(!messageInput.value){
         return;
     }
-    setSending(true);
-    socket.emit('message', {content: messageInput.value, type: 'text'});
+    socket.emit('message', {content: messageInput.value});
     messageInput.value = '';
 }
 
-async function sendMedia(socket){
+async function sendMedia(mediaManager){
     if(!mediaInput.files.length){
         return;
     }
@@ -63,8 +68,53 @@ async function sendMedia(socket){
     const [file] = mediaInput.files;
     const imageData = await readFile(file);
     const [type] = file.type.split('/');
-    socket.emit('message', {content: imageData, type});
+    mediaManager.send(imageData, type);
     mediaInput.value = '';
+}
+
+function onMediaReceive(data){
+    const {userId, userName, dataIndex, dataLength, type, mySelf} = data;
+    const userColor = mySelf ? 'darkturquoise' : 'white';
+    if(dataIndex == 0){
+        const message = type + '[0%]';
+        const li = pushScreenMessage(userName, message, userColor, userColor);
+        mediaElements[userId] = li;
+    }else{
+        if(!mediaElements[userId]){
+            return;
+        }
+        const span = mediaElements[userId].getElementsByTagName('span')[1];
+        span.innerText = type + '['+percent(dataIndex, dataLength)+']';
+    }
+}
+
+function onMediaSend(data){
+    const {dataIndex, dataLength} = data;
+    mediaLabel.innerText = percent(dataIndex, dataLength);
+    if(dataIndex == dataLength){
+        setSending(false);
+        mediaLabel.innerText = dictionary.Media;
+    }
+}
+
+async function onMediaComplete(data){
+    const {mySelf, userId, userName, url, type} = data;
+    const userColor = mySelf ? 'darkturquoise' : 'white';
+    const li = mediaElements[userId];
+    li.innerText = '';
+    switch(type){
+        case 'audio':
+            pushAudioMessage(li, userName, url, userColor);
+            break;
+
+        case 'image':
+            pushImageMessage(li, userName, url, userColor);
+            break;
+
+        case 'video':
+            pushVideoMessage(li, userName, url, userColor);
+            break;
+    }
 }
 
 function setup(){
@@ -92,6 +142,8 @@ function setup(){
     setupDiv.style.display = 'none';
     chatDiv.style.display = 'block';
 
+    const mediaManager = new MediaManager(socket, onMediaReceive, onMediaSend, onMediaComplete);
+
     socket.on('room-info', (room) => {
         roomId = room.id;
         roomIdCopyButton.disabled = false;
@@ -100,27 +152,8 @@ function setup(){
 
     socket.on('message', async (msg) => {
         const mySocket = msg.id = socket.id; 
-        if(mySocket){
-            setSending(false);
-        }
         const userColor =  mySocket ? 'darkturquoise' : 'white';
-        switch(msg.type){
-            case 'image':
-                await pushImageMessage(msg.name, msg.content, userColor);
-                break;
-
-            case 'video':
-                await pushVideoMessage(msg.name, msg.content, userColor);
-                break;
-
-            case 'audio':
-                await pushAudioMessage(msg.name, msg.content, userColor);
-                break;
-
-            case 'text':
-                pushScreenMessage(msg.name, msg.content, userColor, 'orange');
-                break;
-        }
+        pushScreenMessage(msg.name, msg.content, userColor, 'orange');
     });
 
     socket.on('disconnect', () => {
@@ -142,7 +175,7 @@ function setup(){
     });
 
     messageInput.onkeydown = (e) => {
-        if(!isSending() && e.key == 'Enter'){
+        if(e.key == 'Enter'){
             e.preventDefault();
             sendMessage(socket);
         }
@@ -153,12 +186,16 @@ function setup(){
     };
 
     mediaInput.onchange = async () => {
-        await sendMedia(socket);
+        await sendMedia(mediaManager);
+    }
+
+    clearChatButton.onclick = () => {
+        messageList.innerText = '';
+        mediaManager.clearUrls();
     }
 }
 
-async function pushImageMessage(name, base64, colorName){
-    const li = document.createElement('li');
+function pushImageMessage(li, name, url, colorName){
     const nameSpan = document.createElement('span');
     nameSpan.className = 'message';
     nameSpan.style.color = colorName;
@@ -167,15 +204,13 @@ async function pushImageMessage(name, base64, colorName){
     const imgDiv = document.createElement('div');
     const img = document.createElement('img');
     img.className = 'imageMessage';
-    img.src = await base64ToBlobUrl(base64);
+    img.src = url;
     imgDiv.appendChild(img);
     li.appendChild(imgDiv);
-    messageList.appendChild(li);
     messageDiv.scrollTop = messageDiv.scrollHeight;
 }
 
-async function pushVideoMessage(name, base64, colorName){
-    const li = document.createElement('li');
+function pushVideoMessage(li, name, url, colorName){
     const nameSpan = document.createElement('span');
     nameSpan.className = 'message';
     nameSpan.style.color = colorName;
@@ -185,15 +220,13 @@ async function pushVideoMessage(name, base64, colorName){
     const video = document.createElement('video');
     video.className = 'imageMessage';
     video.controls = true;
-    video.src = await base64ToBlobUrl(base64);
+    video.src = url;
     videoDiv.appendChild(video);
     li.appendChild(videoDiv);
-    messageList.appendChild(li);
     messageDiv.scrollTop = messageDiv.scrollHeight;
 }
 
-async function pushAudioMessage(name, base64, colorName){
-    const li = document.createElement('li');
+function pushAudioMessage(li, name, url, colorName){
     const nameSpan = document.createElement('span');
     nameSpan.className = 'message';
     nameSpan.style.color = colorName;
@@ -203,10 +236,9 @@ async function pushAudioMessage(name, base64, colorName){
     const audio = document.createElement('audio');
     audio.className = 'audioMessage';
     audio.controls = true;
-    audio.src = await base64ToBlobUrl(base64);
+    audio.src = url;
     audioSpan.appendChild(audio);
     li.appendChild(audioSpan);
-    messageList.appendChild(li);
     messageDiv.scrollTop = messageDiv.scrollHeight;
 }
 
@@ -224,20 +256,14 @@ function pushScreenMessage(name, message, colorName, colorMessage){
     li.appendChild(messageSpan);
     messageList.appendChild(li);
     messageDiv.scrollTop = messageDiv.scrollHeight;
-}
-
-function isSending(){
-    return messageButton.enabled;
+    return li;
 }
 
 function setSending(sending){
-    messageButton.disabled = sending;
     mediaInput.disabled = sending;
     if(sending){
-        messageButton.innerText = '. . .';
         mediaLabel.innerText = '. . .';
     }else{
-        messageButton.innerText = dictionary.Send;
         mediaLabel.innerText = dictionary.Media;
     }
 }
@@ -267,10 +293,6 @@ roomIdCopyButton.onclick = () => {
     navigator.clipboard.writeText(roomId);
 }
 
-clearChatButton.onclick = () => {
-    messageList.innerText = '';
-}
-
 async function readFile(file){
     const reader = new FileReader();
     const promise = new Promise((res, rej) => {
@@ -296,6 +318,101 @@ async function base64ToBlob(base64){
         throw new Error(await response.text());
     }
     return await response.blob();
+}
+
+const CHUNK_SIZE = 2e5;
+
+class MediaManager{
+    constructor(socket, mediaReceiveListener, mediaSendListener, mediaCompleteListener){
+        this.medias = new Map();
+        this.mediaReceiveListener = mediaReceiveListener;
+        this.mediaSendListener = mediaSendListener;
+        this.mediaCompleteListener = mediaCompleteListener;
+        this.socket = socket;
+        this.sendingBase64 = '';
+        this.sendingType = ''; 
+        this.sendingIndex = 0;
+
+        socket.on('media', (mediaData) => this.#onMedia(mediaData));
+        socket.on('chunk-send', (chunkData) => this.#onChunkSend(chunkData));
+    }
+
+    send(base64, type){
+        if(this.#isSending())
+            return;
+
+        this.sendingBase64 = base64;
+        this.sendingType = type;
+        this.#send();
+    }
+
+    clearUrls(){
+        for(const id in this.medias){
+            const media = this.medias[id];
+            if(media.blobUrl){
+                URL.revokeObjectURL(media.blobUrl);
+            }
+        }
+    }
+
+    async #onMedia(mediaData){
+        const {userId, userName, dataChunk, dataIndex, dataLength, type} = mediaData;
+        const media = this.medias[userId] ? this.medias[userId] : this.#newMedia();
+        media.data += dataChunk;
+        media.index += dataChunk.length;
+        this.medias[userId] = media;
+        const mySelf = this.socket.id == userId;
+        this.mediaReceiveListener({
+            userId, userName, dataIndex, dataLength, type, mySelf
+        });
+        if(dataIndex == dataLength){
+            const base64 = this.medias[userId].data;
+            this.medias[userId].blobUrl = await base64ToBlobUrl(base64);
+            this.medias[userId].data = '';
+            this.mediaCompleteListener({
+                url: this.medias[userId].blobUrl,
+                type, userId, userName, mySelf
+            });
+        }
+    }
+
+    #onChunkSend(chunkData){
+        const {dataIndex, dataLength} = chunkData;
+        this.mediaSendListener(chunkData);
+        if(dataIndex < dataLength){
+            this.#send();
+        }else{
+            this.sendingBase64 = '';
+            this.sendingIndex = 0;
+            this.sendingType = '';
+        }
+    }
+
+    #isSending(){
+        return this.sendingBase64 != '';
+    }
+
+    #send(){
+        const chunk = this.sendingBase64.substr(this.sendingIndex, CHUNK_SIZE);
+        this.socket.emit('media', {
+            dataChunk: chunk,
+            dataIndex: this.sendingIndex,
+            dataLength: this.sendingBase64.length,
+            type: this.sendingType
+        });
+        this.sendingIndex += CHUNK_SIZE;
+        if(this.sendingIndex > this.sendingBase64.length){
+            this.sendingIndex = this.sendingBase64.length;
+        }
+    }
+
+    #newMedia(){
+        return {
+            data: '',
+            index: 0,
+            blobUrl: null
+        };
+    }
 }
 
 }());

@@ -171,7 +171,7 @@ function setup(){
 
     socket.on('connect_error', (error) => {
         alert(error);
-        location.reload();
+        location.replace(location.origin);
     });
 
     messageInput.onkeydown = (e) => {

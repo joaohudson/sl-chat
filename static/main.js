@@ -314,7 +314,7 @@ if(getRoomId()){
     createRoomDiv.hidden = true;
 }
 
-const CHUNK_SIZE = 2e5;
+const CHUNK_SIZE = 1e6;
 
 class MediaManager{
     constructor(socket, mediaReceiveListener, mediaSendListener, mediaCompleteListener){

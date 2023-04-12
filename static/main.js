@@ -6,19 +6,14 @@ const messageInput = document.getElementById('messageInput');
 const messageButton = document.getElementById('messageButton');
 const nameInput = document.getElementById('nameInput');
 const nameButton = document.getElementById('nameButton');
-const roomIdInput = document.getElementById('roomIdInput');
 const roomTitleInput = document.getElementById('roomTitleInput');
 const setupDiv = document.getElementById('setupDiv');
 const chatDiv = document.getElementById('chatDiv');
 const [h1] = document.getElementsByTagName('h1');
 const roomIdCopyButton = document.getElementById('roomIdCopyButton');
-const createRoomCheckbox = document.getElementById('createRoomCheckbox');
-const createRoomDiv = document.getElementById('createRoomDiv');
-const loginRoomDiv = document.getElementById('loginRoomDiv');
-const createRoomLabel = document.getElementById('createRoomLabel');
 const roomTitleLabel = document.getElementById('roomTitleLabel');
+const createRoomDiv = document.getElementById('createRoomDiv');
 const userNameLabel = document.getElementById('userNameLabel');
-const roomIdInputLabel = document.getElementById('roomIdInputLabel');
 const profileNameLabel = document.getElementById('profileNameLabel');
 const roomNameLabel = document.getElementById('roomNameLabel');
 const clearChatButton = document.getElementById('clearChatButton');
@@ -34,11 +29,9 @@ const dictionary = await dictionaryResponse.json();
 
 //setup page
 h1.innerText = dictionary.Setup;
-createRoomLabel.innerText = dictionary.CreateRoom;
 roomTitleLabel.innerText = dictionary.RoomTitle;
 roomIdCopyButton.innerText = dictionary.roomIdCopy;
 userNameLabel.innerText = dictionary.UserName;
-roomIdInputLabel.innerText = dictionary.RoomId;
 messageButton.innerText = dictionary.Send;
 clearChatButton.innerText = dictionary.clearChat;
 mediaLabel.innerText = dictionary.Media;
@@ -50,7 +43,6 @@ function percent(current, max){
 
 //state
 const mediaElements = new Map();
-let roomId;
 
 function sendMessage(socket){
     if(!messageInput.value){
@@ -117,11 +109,22 @@ async function onMediaComplete(data){
     }
 }
 
+function getRoomId(){
+    return window.location.hash.substr(1);
+}
+
+function setRoomId(roomId){
+    if(!window.location.href.includes('#')){
+        window.location.href += '#' + roomId;
+    }
+}
+
 function setup(){
     if(!nameInput.value){
         return;
     }
-    const createRoom = createRoomCheckbox.checked;
+    const roomId = getRoomId();
+    const createRoom = !roomId;
     const loginRequest = {userName: nameInput.value};
     if(createRoom){
         if(!roomTitleInput.value){
@@ -129,10 +132,7 @@ function setup(){
         }
         loginRequest.roomTitle = roomTitleInput.value;
     }else{
-        if(!roomIdInput.value){
-            return;
-        }
-        loginRequest.roomId = roomIdInput.value;
+        loginRequest.roomId = roomId;
     }
     
     const socket = io({auth: loginRequest});
@@ -145,7 +145,7 @@ function setup(){
     const mediaManager = new MediaManager(socket, onMediaReceive, onMediaSend, onMediaComplete);
 
     socket.on('room-info', (room) => {
-        roomId = room.id;
+        setRoomId(room.id);
         roomIdCopyButton.disabled = false;
         roomNameLabel.innerText = dictionary.Room + ': ' + room.title;
     });
@@ -278,19 +278,8 @@ nameInput.onkeydown = (e) => {
     }
 }
 
-createRoomCheckbox.onclick = () => {
-    const create = createRoomCheckbox.checked;
-    if(create){
-        createRoomDiv.style.display = 'block';
-        loginRoomDiv.style.display = 'none';
-    }else{
-        createRoomDiv.style.display = 'none';
-        loginRoomDiv.style.display = 'block';
-    }
-}
-
 roomIdCopyButton.onclick = () => {
-    navigator.clipboard.writeText(roomId);
+    navigator.clipboard.writeText(window.location.href);
 }
 
 async function readFile(file){
@@ -318,6 +307,11 @@ async function base64ToBlob(base64){
         throw new Error(await response.text());
     }
     return await response.blob();
+}
+
+//start
+if(getRoomId()){
+    createRoomDiv.hidden = true;
 }
 
 const CHUNK_SIZE = 2e5;

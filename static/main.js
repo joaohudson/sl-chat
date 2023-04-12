@@ -362,7 +362,7 @@ class MediaManager{
             const base64 = this.medias[userId].data;
             const blobUrl = await base64ToBlobUrl(base64);
             this.blobUrls.push(blobUrl);
-            this.medias[userId].data = '';
+            delete this.medias[userId];
             this.mediaCompleteListener({
                 url: blobUrl,
                 type, userId, userName, mySelf

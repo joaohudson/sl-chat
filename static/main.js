@@ -319,6 +319,7 @@ const CHUNK_SIZE = 2e5;
 class MediaManager{
     constructor(socket, mediaReceiveListener, mediaSendListener, mediaCompleteListener){
         this.medias = new Map();
+        this.blobUrls = [];
         this.mediaReceiveListener = mediaReceiveListener;
         this.mediaSendListener = mediaSendListener;
         this.mediaCompleteListener = mediaCompleteListener;
@@ -341,12 +342,10 @@ class MediaManager{
     }
 
     clearUrls(){
-        for(const id in this.medias){
-            const media = this.medias[id];
-            if(media.blobUrl){
-                URL.revokeObjectURL(media.blobUrl);
-            }
+        for(const blobUrl of this.blobUrls){
+            URL.revokeObjectURL(blobUrl);
         }
+        this.blobUrls = [];
     }
 
     async #onMedia(mediaData){
@@ -361,10 +360,11 @@ class MediaManager{
         });
         if(dataIndex == dataLength){
             const base64 = this.medias[userId].data;
-            this.medias[userId].blobUrl = await base64ToBlobUrl(base64);
+            const blobUrl = await base64ToBlobUrl(base64);
+            this.blobUrls.push(blobUrl);
             this.medias[userId].data = '';
             this.mediaCompleteListener({
-                url: this.medias[userId].blobUrl,
+                url: blobUrl,
                 type, userId, userName, mySelf
             });
         }
@@ -403,8 +403,7 @@ class MediaManager{
     #newMedia(){
         return {
             data: '',
-            index: 0,
-            blobUrl: null
+            index: 0
         };
     }
 }

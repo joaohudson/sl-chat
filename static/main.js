@@ -58,9 +58,7 @@ async function sendMedia(mediaManager){
     }
     setSending(true);
     const [file] = mediaInput.files;
-    const imageData = await readFile(file);
-    const [type] = file.type.split('/');
-    mediaManager.send(imageData, type);
+    mediaManager.send(file);
     mediaInput.value = '';
 }
 
@@ -91,10 +89,11 @@ function onMediaSend(data){
 
 async function onMediaComplete(data){
     const {mySelf, userId, userName, url, type} = data;
+    const shortType = type.split('/')[0];
     const userColor = mySelf ? 'darkturquoise' : 'white';
     const li = mediaElements[userId];
     li.innerText = '';
-    switch(type){
+    switch(shortType){
         case 'audio':
             pushAudioMessage(li, userName, url, userColor);
             break;
@@ -314,7 +313,20 @@ if(getRoomId()){
     createRoomDiv.hidden = true;
 }
 
-const CHUNK_SIZE = 1e6;
+//utils
+function base64ToBinary(base64){
+    return new Uint8Array(window.atob(base64).split(','));
+}
+
+function binaryToBase64(binary){
+    return window.btoa(binary);
+}
+
+async function blobToArray(blob){
+    return new Uint8Array(await blob.arrayBuffer());
+}
+
+const CHUNK_SIZE = 1e5;
 
 class MediaManager{
     constructor(socket, mediaReceiveListener, mediaSendListener, mediaCompleteListener){
@@ -324,20 +336,21 @@ class MediaManager{
         this.mediaSendListener = mediaSendListener;
         this.mediaCompleteListener = mediaCompleteListener;
         this.socket = socket;
-        this.sendingBase64 = '';
+        this.sendingFile = null;
         this.sendingType = ''; 
         this.sendingIndex = 0;
 
         socket.on('media', (mediaData) => this.#onMedia(mediaData));
         socket.on('chunk-send', (chunkData) => this.#onChunkSend(chunkData));
+        socket.on('disconnect', (message) => this.#onDisconnect(message));
     }
 
-    send(base64, type){
+    send(file){
         if(this.#isSending())
             return;
 
-        this.sendingBase64 = base64;
-        this.sendingType = type;
+        this.sendingFile = file;
+        this.sendingType = file.type;
         this.#send();
     }
 
@@ -351,16 +364,18 @@ class MediaManager{
     async #onMedia(mediaData){
         const {userId, userName, dataChunk, dataIndex, dataLength, type} = mediaData;
         const media = this.medias[userId] ? this.medias[userId] : this.#newMedia();
-        media.data += dataChunk;
-        media.index += dataChunk.length;
+        const binaryChunk = base64ToBinary(dataChunk);
+        media.chunks.push(binaryChunk);
+        media.index += binaryChunk.length;
         this.medias[userId] = media;
         const mySelf = this.socket.id == userId;
         this.mediaReceiveListener({
             userId, userName, dataIndex, dataLength, type, mySelf
         });
         if(dataIndex == dataLength){
-            const base64 = this.medias[userId].data;
-            const blobUrl = await base64ToBlobUrl(base64);
+            const chunks = this.medias[userId].chunks;
+            const blob = new Blob(chunks, {type});
+            const blobUrl = URL.createObjectURL(blob);
             this.blobUrls.push(blobUrl);
             delete this.medias[userId];
             this.mediaCompleteListener({
@@ -370,40 +385,52 @@ class MediaManager{
         }
     }
 
-    #onChunkSend(chunkData){
+    async #onChunkSend(chunkData){
         const {dataIndex, dataLength} = chunkData;
         this.mediaSendListener(chunkData);
         if(dataIndex < dataLength){
-            this.#send();
+            await this.#send();
         }else{
-            this.sendingBase64 = '';
-            this.sendingIndex = 0;
-            this.sendingType = '';
+            this.#resetSend();
         }
     }
 
-    #isSending(){
-        return this.sendingBase64 != '';
+    #onDisconnect(msg){
+        console.log('Disconnect: ', msg);
+        this.medias = new Map();
+        this.#resetSend();
     }
 
-    #send(){
-        const chunk = this.sendingBase64.substr(this.sendingIndex, CHUNK_SIZE);
-        this.socket.emit('media', {
-            dataChunk: chunk,
+    #resetSend(){
+        this.sendingFile = null;
+        this.sendingType = ''; 
+        this.sendingIndex = 0;
+    }
+
+    #isSending(){
+        return this.sendingFile != null;
+    }
+
+    async #send(){
+        const blob = this.sendingFile.slice(this.sendingIndex, this.sendingIndex + CHUNK_SIZE);
+        const chunk = await blobToArray(blob);
+        const request = {
+            dataChunk: binaryToBase64(chunk),
             dataIndex: this.sendingIndex,
-            dataLength: this.sendingBase64.length,
+            dataLength: this.sendingFile.size,
             type: this.sendingType
-        });
+        };
+        this.socket.emit('media', request);
         this.sendingIndex += CHUNK_SIZE;
-        if(this.sendingIndex > this.sendingBase64.length){
-            this.sendingIndex = this.sendingBase64.length;
+        if(this.sendingIndex > this.sendingFile.size){
+            this.sendingIndex = this.sendingFile.size;
         }
     }
 
     #newMedia(){
         return {
-            data: '',
-            index: 0
+            index: 0,
+            chunks: []
         };
     }
 }

@@ -314,19 +314,19 @@ if(getRoomId()){
 }
 
 //utils
-function base64ToBinary(base64){
-    return new Uint8Array(window.atob(base64).split(','));
+function stringToBinary(string){
+    return new Uint8Array(string.split(','));
 }
 
-function binaryToBase64(binary){
-    return window.btoa(binary);
+function binaryToString(binary){
+    return binary.toString();
 }
 
 async function blobToArray(blob){
     return new Uint8Array(await blob.arrayBuffer());
 }
 
-const CHUNK_SIZE = 1e5;
+const CHUNK_SIZE = 2e5;
 
 class MediaManager{
     constructor(socket, mediaReceiveListener, mediaSendListener, mediaCompleteListener){
@@ -364,7 +364,7 @@ class MediaManager{
     async #onMedia(mediaData){
         const {userId, userName, dataChunk, dataIndex, dataLength, type} = mediaData;
         const media = this.medias[userId] ? this.medias[userId] : this.#newMedia();
-        const binaryChunk = base64ToBinary(dataChunk);
+        const binaryChunk = stringToBinary(dataChunk);
         media.chunks.push(binaryChunk);
         media.index += binaryChunk.length;
         this.medias[userId] = media;
@@ -415,7 +415,7 @@ class MediaManager{
         const blob = this.sendingFile.slice(this.sendingIndex, this.sendingIndex + CHUNK_SIZE);
         const chunk = await blobToArray(blob);
         const request = {
-            dataChunk: binaryToBase64(chunk),
+            dataChunk: binaryToString(chunk),
             dataIndex: this.sendingIndex,
             dataLength: this.sendingFile.size,
             type: this.sendingType

@@ -281,33 +281,6 @@ roomIdCopyButton.onclick = () => {
     navigator.clipboard.writeText(window.location.href);
 }
 
-async function readFile(file){
-    const reader = new FileReader();
-    const promise = new Promise((res, rej) => {
-        reader.onloadend = () => {
-            res(reader.result);
-        };
-        reader.onerror = (error) => {
-            rej(error);
-        }
-    });
-    reader.readAsDataURL(file);
-    return promise;
-}
-
-async function base64ToBlobUrl(base64){
-    const blob = await base64ToBlob(base64);
-    return URL.createObjectURL(blob);
-}
-
-async function base64ToBlob(base64){
-    const response = await fetch(base64);
-    if(!response.ok){
-        throw new Error(await response.text());
-    }
-    return await response.blob();
-}
-
 //start
 if(getRoomId()){
     createRoomDiv.hidden = true;

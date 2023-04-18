@@ -8,7 +8,7 @@ const {Dictionary} = require('./dictionary');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {maxHttpBufferSize: 30e6}); //30MB for messages
+const io = new Server(server, {maxHttpBufferSize: 8e6}); //8MB for messages
 
 const PORT = '8080';
 

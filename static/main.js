@@ -150,7 +150,7 @@ function setup(){
     });
 
     socket.on('message', async (msg) => {
-        const mySocket = msg.id = socket.id; 
+        const mySocket = msg.id == socket.id; 
         const userColor =  mySocket ? 'darkturquoise' : 'white';
         pushScreenMessage(msg.name, msg.content, userColor, 'orange');
     });

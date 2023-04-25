@@ -1,4 +1,5 @@
 import { MediaManager } from "/network/media-manager.js";
+import { SetupComponent } from "/components/setup.js"
 
 (async function(){
 
@@ -7,9 +8,6 @@ const messageDiv = document.getElementById('messageDiv');
 const messageInput = document.getElementById('messageInput');
 const messageButton = document.getElementById('messageButton');
 const nameInput = document.getElementById('nameInput');
-const nameButton = document.getElementById('nameButton');
-const roomTitleInput = document.getElementById('roomTitleInput');
-const setupDiv = document.getElementById('setupDiv');
 const chatDiv = document.getElementById('chatDiv');
 const [h1] = document.getElementsByTagName('h1');
 const roomIdCopyButton = document.getElementById('roomIdCopyButton');
@@ -29,11 +27,15 @@ if(!dictionaryResponse.ok){
 }
 const dictionary = await dictionaryResponse.json();
 
+const setupComponent = new SetupComponent({
+    div: document.getElementById('setupDiv'),
+    dictionary: dictionary,
+    onSetup: setup
+});
+
 //setup page
 h1.innerText = dictionary.Setup;
-roomTitleLabel.innerText = dictionary.RoomTitle;
 roomIdCopyButton.innerText = dictionary.roomIdCopy;
-userNameLabel.innerText = dictionary.UserName;
 messageButton.innerText = dictionary.Send;
 clearChatButton.innerText = dictionary.clearChat;
 mediaLabel.innerText = dictionary.Media;
@@ -120,27 +122,11 @@ function setRoomId(roomId){
     }
 }
 
-function setup(){
-    if(!nameInput.value){
-        return;
-    }
-    const roomId = getRoomId();
-    const createRoom = !roomId;
-    const loginRequest = {userName: nameInput.value};
-    if(createRoom){
-        if(!roomTitleInput.value){
-            return;
-        }
-        loginRequest.roomTitle = roomTitleInput.value;
-    }else{
-        loginRequest.roomId = roomId;
-    }
-    
-    const socket = io({auth: loginRequest});
+function setup(socket){
     h1.innerText = 'Node Chat';
     profileNameLabel.innerText = dictionary.Profile + ': ' + nameInput.value;
     nameInput.value = '';
-    setupDiv.style.display = 'none';
+    setupComponent.show(false);
     chatDiv.style.display = 'block';
 
     const mediaManager = new MediaManager(socket, onMediaReceive, onMediaSend, onMediaComplete);
@@ -266,16 +252,6 @@ function setSending(sending){
         mediaLabel.innerText = '. . .';
     }else{
         mediaLabel.innerText = dictionary.Media;
-    }
-}
-
-nameButton.onclick = () => {
-    setup();
-}
-
-nameInput.onkeydown = (e) => {
-    if(e.key == 'Enter'){
-        setup();
     }
 }
 

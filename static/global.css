@@ -180,6 +180,10 @@ h1{
     button{
         font-size: 14px;
     }
+    .dialogSubPanel{
+       width: 90%;
+       height: 60%; 
+    }
     .messageDiv{
         margin-left: 10px;
         margin-right: 10px;

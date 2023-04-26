@@ -99,7 +99,6 @@ class MediaManager{
             dataLength: this.sendingFile.size,
             type: this.sendingType
         };
-        console.log(request.dataChunk.length);
         this.socket.emit('media', request);
         this.sendingIndex += CHUNK_SIZE;
         if(this.sendingIndex > this.sendingFile.size){

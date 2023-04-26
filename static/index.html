@@ -46,11 +46,9 @@
             <span class="horizontalSeparator">|</span>
             <label id="profileNameLabel"></label>
             <div class="tinyVerticalSpace"></div>
-            <div>
-                <button id="roomLinkCopyButtom" disabled="true">Copy Room ID</button>
-                <span class="horizontalSeparator"></span>
-                <button id="clearChatButton">Clear Chat</button>
-                <div class="tinyVerticalSpace"></div>
+            <div class="actionButtonDiv">
+                <button id="roomLinkCopyButtom" disabled="true" class="actionButton">Copy Room ID</button>
+                <button id="clearChatButton" class="actionButton">Clear Chat</button>
             </div>
             <div id="messageDiv" class="messageDiv">
                 <ul id="messageList">
@@ -58,9 +56,9 @@
             </div>
             <div class="inputDiv">
                 <input type="file" id="imageInput" class="imageInput" accept="image/*, video/*, audio/*">
-                <label id="imageLabel" for="imageInput" class="imageLabel"></label>
+                <button id="mediaButton" class="sendButton">Media</button>
                 <input type="text" id="messageInput" class="textInput messageInput" maxlength="10000">
-                <button id="messageButton">Send</button>
+                <button id="messageButton" class="sendButton">Send</button>
             </div>
         </div>
         <script src="/socket.io/socket.io.js"></script>

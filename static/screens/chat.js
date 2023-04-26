@@ -18,7 +18,7 @@ class ChatScreen{
         this.messageButton = div.querySelector('#messageButton');
         this.clearChatButton = div.querySelector('#clearChatButton');
         this.mediaInput = div.querySelector('#imageInput');
-        this.mediaLabel = div.querySelector('#imageLabel');
+        this.mediaButton = div.querySelector('#mediaButton');
         this.roomLinkCopyButtom = div.querySelector('#roomLinkCopyButtom');
         this.h1 = h1;
         this.profileNameLabel = div.querySelector('#profileNameLabel');
@@ -34,7 +34,7 @@ class ChatScreen{
         this.roomLinkCopyButtom.innerText = this.dictionary.roomLinkCopy;
         this.messageButton.innerText = this.dictionary.Send;
         this.clearChatButton.innerText = this.dictionary.clearChat;
-        this.mediaLabel.innerText = this.dictionary.Media;
+        this.mediaButton.innerText = this.dictionary.Media;
 
         const mediaManager = new MediaManager(socket,
             (data) => this.#onMediaReceive(data), 
@@ -87,6 +87,10 @@ class ChatScreen{
             this.#sendMedia(mediaManager);
         }
 
+        this.mediaButton.onclick = () => {
+            this.mediaInput.click();
+        }
+
         this.clearChatButton.onclick = async () => {
             if(await this.dialogPanel.showConfirmMessage(this.dictionary.confirmMessageClearChat)){
                 this.messageList.innerText = '';
@@ -123,11 +127,11 @@ class ChatScreen{
     }
 
     #setSending(sending){
-        this.mediaInput.disabled = sending;
+        this.mediaButton.disabled = sending;
         if(sending){
-            this.mediaLabel.innerText = '. . .';
+            this.mediaButton.innerText = '. . .';
         }else{
-            this.mediaLabel.innerText = this.dictionary.Media;
+            this.mediaButton.innerText = this.dictionary.Media;
         }
     }
 
@@ -155,10 +159,10 @@ class ChatScreen{
 
     #onMediaSend(data){
         const {dataIndex, dataLength} = data;
-        this.mediaLabel.innerText = percent(dataIndex, dataLength);
+        this.mediaButton.innerText = percent(dataIndex, dataLength);
         if(dataIndex == dataLength){
             this.#setSending(false);
-            this.mediaLabel.innerText = this.dictionary.Media;
+            this.mediaButton.innerText = this.dictionary.Media;
         }
     }
 

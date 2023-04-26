@@ -98,6 +98,25 @@ h1{
     padding: 7px;
     font-size: 12px;
 }
+.sendButton{
+    width: 60px;
+    height: 35px;
+}
+.actionButton{
+    margin: 10px;
+    width: 140px;
+    height: 35px;
+    word-wrap: break-word;
+}
+.actionButtonDiv{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    margin-bottom: 15px;
+    margin-right: 20%;
+    margin-left: 20%;
+    overflow-x: auto;
+}
 .dialogPanel{
     display: flex;
     z-index: 1000;
@@ -188,6 +207,13 @@ h1{
         margin-left: 10px;
         margin-right: 10px;
     }
+    .actionButtonDiv{
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .actionButton{
+        height: 45px;
+    }
     .audioMessage{
         width: 80%;
     }
@@ -202,5 +228,12 @@ h1{
     }
     .tinyVerticalSpace{
         margin-top: 20px;
+    }
+}
+
+/*for tiny mobile*/
+@media only screen and (max-width: 360px){
+    .messageInput{
+        width: 120px;
     }
 }

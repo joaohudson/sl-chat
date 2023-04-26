@@ -2,7 +2,7 @@ import { SetupComponent } from "/components/setup.js"
 import { ChatComponent } from "/components/chat.js";
 
 (async function(){
-    
+
 const messageButton = document.getElementById('messageButton');
 const [h1] = document.getElementsByTagName('h1');
 const roomIdCopyButton = document.getElementById('roomIdCopyButton');
@@ -15,7 +15,6 @@ if(!dictionaryResponse.ok){
     return;
 }
 const dictionary = await dictionaryResponse.json();
-const roomId = window.location.hash.substr(1);
 
 const chatComponent = new ChatComponent({
     div: document.getElementById('chatDiv'),
@@ -25,8 +24,7 @@ const chatComponent = new ChatComponent({
 const setupComponent = new SetupComponent({
     div: document.getElementById('setupDiv'),
     dictionary: dictionary,
-    nextPage: chatComponent,
-    roomId: roomId
+    nextPage: chatComponent
 });
 
 //setup page

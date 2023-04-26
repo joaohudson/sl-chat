@@ -1,7 +1,7 @@
 class SetupComponent{
-    constructor({div, dictionary, roomId, nextPage}){
+    constructor({div, dictionary, nextPage}){
         this.div = div;
-        this.roomId = roomId;
+        this.roomId = window.location.hash.substr(1);;
         this.nextPage = nextPage;
         this.dictionary = dictionary;
 

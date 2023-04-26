@@ -4,7 +4,7 @@ async function blobToArray(blob){
     return new Uint8Array(await blob.arrayBuffer());
 }
 
-const CHUNK_SIZE = 18e5*2; //3.6MB
+const CHUNK_SIZE = 8e5; //800kb
 
 class MediaManager{
     constructor(socket, mediaReceiveListener, mediaSendListener, mediaCompleteListener){

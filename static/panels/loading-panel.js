@@ -4,7 +4,7 @@ class LoadingPanel{
     }
 
     show(){
-        this.div.style.display = 'block';
+        this.div.style.display = 'flex';
     }
 
     hide(){

@@ -28,7 +28,7 @@ class ChatScreen{
 
         this.h1.innerText = 'Node Chat';
         this.profileNameLabel.innerText = this.dictionary.Profile + ': ' + userName;
-        this.roomIdCopyButton.innerText = this.dictionary.roomIdCopy;
+        this.roomIdCopyButton.innerText = this.dictionary.roomLinkCopy;
         this.messageButton.innerText = this.dictionary.Send;
         this.clearChatButton.innerText = this.dictionary.clearChat;
         this.mediaLabel.innerText = this.dictionary.Media;

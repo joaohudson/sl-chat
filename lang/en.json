@@ -13,5 +13,9 @@
     "roomLinkCopy": "Copy Link",
     "roomLinkCopied": "Link Copied!",
     "clearChat": "Clear Chat",
-    "Media": "Media"
+    "Media": "Media",
+    "Ok": "Ok",
+    "Yes": "Yes",
+    "No": "No",
+    "confirmMessageClearChat": "Are you sure you want to delete the conversation?"
 }

@@ -98,6 +98,51 @@ h1{
     padding: 7px;
     font-size: 12px;
 }
+.dialogPanel{
+    display: flex;
+    z-index: 1000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: #00000050;
+    border-radius: 0px;
+}
+.dialogSubPanel{
+    display: flex;
+    width: 400px;
+    height: 250px;
+    margin: 0 auto;
+    flex-direction: column;
+    background-color: #ec9646;
+}
+.dialogMessageDiv{
+    display: flex;
+    margin: 10px 20px;
+    margin-top: 30px;
+    word-wrap: break-word;
+    overflow-y: auto;
+    height: 80%;
+    text-align: center;
+    align-items: center;
+}
+.dialogMessage{
+    font-weight: bold;
+    text-align: center;
+    margin: 0 auto;
+}
+.dialogButtonDiv{
+    display: flex;
+    margin: 10px 20px;
+    height: 10%;
+    justify-content: space-around;
+}
+.dialogButtom{
+    width: 80px;
+    height: 30px;
+}
 .loadingPanel{
     background-color: #ec9646;
     position: absolute;

@@ -13,5 +13,9 @@
     "roomLinkCopy": "Copiar Link de la Habitación",
     "roomLinkCopied": "Link de la Habitación Copiado!",
     "clearChat": "Limpiar Conversación",
-    "Media": "Media"
+    "Media": "Media",
+    "Ok": "Ok",
+    "Yes": "Sí",
+    "No": "No",
+    "confirmMessageClearChat": "¿Seguro que quieres eliminar la conversación?"
 }

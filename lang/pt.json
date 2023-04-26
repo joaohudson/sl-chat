@@ -13,5 +13,9 @@
     "roomLinkCopy": "Copiar Link",
     "roomLinkCopied": "Link Copiado!",
     "clearChat": "Limpar Conversa",
-    "Media": "Mídia"
+    "Media": "Mídia",
+    "Ok": "Ok",
+    "Yes": "sim",
+    "No": "Não",
+    "confirmMessageClearChat": "Tem certeza que deseja apagar a conversa?"
 }

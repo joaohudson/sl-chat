@@ -6,11 +6,12 @@ function percent(current, max){
 }
 
 class ChatScreen{
-    constructor({div, dictionary, h1, loadingPanel}){
+    constructor({div, dictionary, h1, loadingPanel, dialogPanel}){
         this.div = div;
         this.dictionary = dictionary;
 
         this.loadingPanel = loadingPanel;
+        this.dialogPanel = dialogPanel;
         this.messageList = div.querySelector('#messageList');
         this.messageDiv = div.querySelector('#messageDiv');
         this.messageInput = div.querySelector('#messageInput');
@@ -66,8 +67,8 @@ class ChatScreen{
             this.#pushScreenMessage(user.name, ' ' + this.dictionary.hasLeftRoom, 'gray', 'gray');
         });
 
-        socket.on('connect_error', (error) => {
-            alert(error);
+        socket.on('connect_error', async (error) => {
+            await this.dialogPanel.showMessage(error);
             location.replace(location.origin);
         });
 
@@ -86,9 +87,11 @@ class ChatScreen{
             this.#sendMedia(mediaManager);
         }
 
-        this.clearChatButton.onclick = () => {
-            this.messageList.innerText = '';
-            mediaManager.clearUrls();
+        this.clearChatButton.onclick = async () => {
+            if(await this.dialogPanel.showConfirmMessage(this.dictionary.confirmMessageClearChat)){
+                this.messageList.innerText = '';
+                mediaManager.clearUrls();
+            }
         }
 
         this.roomLinkCopyButtom.onclick = async () => {

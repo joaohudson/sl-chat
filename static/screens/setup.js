@@ -1,4 +1,4 @@
-class SetupComponent{
+class SetupScreen{
     constructor({div, h1, dictionary, nextPage}){
         this.div = div;
         this.roomId = window.location.hash.substr(1);;
@@ -56,4 +56,4 @@ class SetupComponent{
     }
 }
 
-export { SetupComponent }
+export { SetupScreen }

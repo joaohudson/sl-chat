@@ -4,7 +4,7 @@ function percent(current, max){
     return Math.floor(current * 100 / max) + '%';
 }
 
-class ChatComponent{
+class ChatScreen{
     constructor({div, dictionary, h1}){
         this.div = div;
         this.dictionary = dictionary;
@@ -237,4 +237,4 @@ class ChatComponent{
     }
 }
 
-export { ChatComponent }
+export { ChatScreen }

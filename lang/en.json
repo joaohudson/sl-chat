@@ -10,7 +10,8 @@
     "UserName": "User Name",
     "Setup": "Setup",
     "Send": "Send",
-    "roomIdCopy": "Copy Room ID",
+    "roomLinkCopy": "Copy Link",
+    "roomLinkCopied": "Link Copied!",
     "clearChat": "Clear Chat",
     "Media": "Media"
 }

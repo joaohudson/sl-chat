@@ -1,4 +1,5 @@
 import { MediaManager } from '/network/media-manager.js';
+import { Time } from "/utils/time.js";
 
 function percent(current, max){
     return Math.floor(current * 100 / max) + '%';
@@ -16,7 +17,7 @@ class ChatScreen{
         this.clearChatButton = div.querySelector('#clearChatButton');
         this.mediaInput = div.querySelector('#imageInput');
         this.mediaLabel = div.querySelector('#imageLabel');
-        this.roomIdCopyButton = div.querySelector('#roomIdCopyButton');
+        this.roomLinkCopyButtom = div.querySelector('#roomLinkCopyButtom');
         this.h1 = h1;
         this.profileNameLabel = div.querySelector('#profileNameLabel');
         this.roomNameLabel = div.querySelector('#roomNameLabel');
@@ -28,7 +29,7 @@ class ChatScreen{
 
         this.h1.innerText = 'Node Chat';
         this.profileNameLabel.innerText = this.dictionary.Profile + ': ' + userName;
-        this.roomIdCopyButton.innerText = this.dictionary.roomIdCopy;
+        this.roomLinkCopyButtom.innerText = this.dictionary.roomLinkCopy;
         this.messageButton.innerText = this.dictionary.Send;
         this.clearChatButton.innerText = this.dictionary.clearChat;
         this.mediaLabel.innerText = this.dictionary.Media;
@@ -40,7 +41,7 @@ class ChatScreen{
 
         socket.on('room-info', (room) => {
             this.#setRoomId(room.id);
-            this.roomIdCopyButton.disabled = false;
+            this.roomLinkCopyButtom.disabled = false;
             this.roomNameLabel.innerText = this.dictionary.Room + ': ' + room.title;
         });
 
@@ -88,8 +89,13 @@ class ChatScreen{
             mediaManager.clearUrls();
         }
 
-        this.roomIdCopyButton.onclick = () => {
+        this.roomLinkCopyButtom.onclick = async () => {
             navigator.clipboard.writeText(window.location.href);
+            this.roomLinkCopyButtom.disabled = true;
+            this.roomLinkCopyButtom.innerText = this.dictionary.roomLinkCopied;
+            await Time.delay(3000);
+            this.roomLinkCopyButtom.disabled = false;
+            this.roomLinkCopyButtom.innerText = this.dictionary.roomLinkCopy;
         }
     }
 

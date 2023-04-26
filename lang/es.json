@@ -10,7 +10,8 @@
     "UserName": "Nombre de Usuario",
     "Setup": "Ajustes",
     "Send": "Mandar",
-    "roomIdCopy": "Copiar ID de la Habitación",
+    "roomLinkCopy": "Copiar Link de la Habitación",
+    "roomLinkCopied": "Link de la Habitación Copiado!",
     "clearChat": "Limpiar Conversación",
     "Media": "Media"
 }

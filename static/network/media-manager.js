@@ -1,17 +1,10 @@
-//utils
-function stringToBinary(string){
-    return new Uint8Array(string.split(','));
-}
-
-function binaryToString(binary){
-    return binary.toString();
-}
+import { BinaryStringParser } from '/utils/binary-string-parser.js';
 
 async function blobToArray(blob){
     return new Uint8Array(await blob.arrayBuffer());
 }
 
-const CHUNK_SIZE = 18e5; //1.8MB
+const CHUNK_SIZE = 18e5*2; //3.6MB
 
 class MediaManager{
     constructor(socket, mediaReceiveListener, mediaSendListener, mediaCompleteListener){
@@ -24,6 +17,7 @@ class MediaManager{
         this.sendingFile = null;
         this.sendingType = ''; 
         this.sendingIndex = 0;
+        this.binaryStringParser = new BinaryStringParser();
 
         socket.on('media', (mediaData) => this.#onMedia(mediaData));
         socket.on('chunk-send', (chunkData) => this.#onChunkSend(chunkData));
@@ -49,7 +43,7 @@ class MediaManager{
     async #onMedia(mediaData){
         const {userId, userName, dataChunk, dataIndex, dataLength, type} = mediaData;
         const media = this.medias[userId] ? this.medias[userId] : this.#newMedia();
-        const binaryChunk = stringToBinary(dataChunk);
+        const binaryChunk = this.binaryStringParser.stringToBinary(dataChunk);
         media.chunks.push(binaryChunk);
         media.index += binaryChunk.length;
         this.medias[userId] = media;
@@ -100,11 +94,12 @@ class MediaManager{
         const blob = this.sendingFile.slice(this.sendingIndex, this.sendingIndex + CHUNK_SIZE);
         const chunk = await blobToArray(blob);
         const request = {
-            dataChunk: binaryToString(chunk),
+            dataChunk: this.binaryStringParser.binaryToString(chunk),
             dataIndex: this.sendingIndex,
             dataLength: this.sendingFile.size,
             type: this.sendingType
         };
+        console.log(request.dataChunk.length);
         this.socket.emit('media', request);
         this.sendingIndex += CHUNK_SIZE;
         if(this.sendingIndex > this.sendingFile.size){

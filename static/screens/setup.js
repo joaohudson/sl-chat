@@ -1,11 +1,12 @@
 class SetupScreen{
-    constructor({div, h1, dictionary, nextPage}){
+    constructor({div, h1, loadingPanel, dictionary, nextPage}){
         this.div = div;
         this.roomId = window.location.hash.substr(1);;
         this.nextPage = nextPage;
         this.dictionary = dictionary;
 
         this.h1 = h1;
+        this.loadingPanel = loadingPanel;
         this.roomTitleLabel = div.querySelector('#roomTitleLabel');
         this.userNameLabel = div.querySelector('#userNameLabel');
         this.roomTitleInput = div.querySelector('#roomTitleInput');
@@ -52,6 +53,7 @@ class SetupScreen{
         }
         const socket = io({auth: loginRequest});
         this.#hide();
+        this.loadingPanel.show();
         this.nextPage.show({socket, userName: this.nameInput.value});
     }
 }

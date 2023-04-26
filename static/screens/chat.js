@@ -6,10 +6,11 @@ function percent(current, max){
 }
 
 class ChatScreen{
-    constructor({div, dictionary, h1}){
+    constructor({div, dictionary, h1, loadingPanel}){
         this.div = div;
         this.dictionary = dictionary;
 
+        this.loadingPanel = loadingPanel;
         this.messageList = div.querySelector('#messageList');
         this.messageDiv = div.querySelector('#messageDiv');
         this.messageInput = div.querySelector('#messageInput');
@@ -43,6 +44,7 @@ class ChatScreen{
             this.#setRoomId(room.id);
             this.roomLinkCopyButtom.disabled = false;
             this.roomNameLabel.innerText = this.dictionary.Room + ': ' + room.title;
+            this.loadingPanel.hide();
         });
 
         socket.on('message', async (msg) => {

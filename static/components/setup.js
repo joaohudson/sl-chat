@@ -1,41 +1,43 @@
-function getRoomId(){
-    return window.location.hash.substr(1);
-}
-
 class SetupComponent{
-    constructor({div, dictionary, onSetup}){
+    constructor({div, dictionary, roomId, nextPage}){
         this.div = div;
-        this.onSetup = onSetup;
+        this.roomId = roomId;
+        this.nextPage = nextPage;
+        this.dictionary = dictionary;
 
-        const roomTitleLabel = div.querySelector('#roomTitleLabel');
-        roomTitleLabel.innerText = dictionary.RoomTitle;
-        const userNameLabel = div.querySelector('#userNameLabel');
-        userNameLabel.innerText = dictionary.UserName;
-
-        const roomTitleInput = div.querySelector('#roomTitleInput');
-        const nameInput = div.querySelector('#nameInput');
-        nameInput.onkeydown = (e) => {
-            if(e.key == 'Enter'){
-                this.#onLogin(nameInput, roomTitleInput);
-            }
-        };
-        const nameButton = div.querySelector('#nameButton');
-        nameButton.onclick = () => {
-            this.#onLogin(nameInput, roomTitleInput);
-        };
-
+        this.roomTitleLabel = div.querySelector('#roomTitleLabel');
+        this.userNameLabel = div.querySelector('#userNameLabel');
+        this.roomTitleInput = div.querySelector('#roomTitleInput');
+        this.nameInput = div.querySelector('#nameInput');
+        this.nameButton = div.querySelector('#nameButton');
+        this.createRoomDiv = document.getElementById('createRoomDiv');
     }
 
-    show(visible){
-        this.div.style.display = visible ? 'block' : 'none'; 
+    show(){
+        this.div.style.display = 'block';
+
+        this.nameButton.onclick = () => {
+            this.#onLogin(this.nameInput, this.roomTitleInput);
+        };
+        this.roomTitleLabel.innerText = this.dictionary.RoomTitle;
+        this.userNameLabel.innerText = this.dictionary.UserName;
+        this.nameInput.onkeydown = (e) => {
+            if(e.key == 'Enter'){
+                this.#onLogin(this.nameInput, this.roomTitleInput);
+            }
+        };
+        this.createRoomDiv.hidden = this.roomId;
+    }
+
+    #hide(){
+        this.div.style.display = 'none';
     }
 
     #onLogin(nameInput, roomTitleInput){
         if(!nameInput.value){
             return;
         }
-        const roomId = getRoomId();
-        const createRoom = !roomId;
+        const createRoom = !this.roomId;
         const loginRequest = {userName: nameInput.value};
         if(createRoom){
             if(!roomTitleInput.value){
@@ -43,10 +45,11 @@ class SetupComponent{
             }
             loginRequest.roomTitle = roomTitleInput.value;
         }else{
-            loginRequest.roomId = roomId;
+            loginRequest.roomId = this.roomId;
         }
         const socket = io({auth: loginRequest});
-        this.onSetup(socket);
+        this.#hide();
+        this.nextPage.show({socket, userName: this.nameInput.value});
     }
 }
 

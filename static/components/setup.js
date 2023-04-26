@@ -1,20 +1,23 @@
 class SetupComponent{
-    constructor({div, dictionary, nextPage}){
+    constructor({div, h1, dictionary, nextPage}){
         this.div = div;
         this.roomId = window.location.hash.substr(1);;
         this.nextPage = nextPage;
         this.dictionary = dictionary;
 
+        this.h1 = h1;
         this.roomTitleLabel = div.querySelector('#roomTitleLabel');
         this.userNameLabel = div.querySelector('#userNameLabel');
         this.roomTitleInput = div.querySelector('#roomTitleInput');
         this.nameInput = div.querySelector('#nameInput');
         this.nameButton = div.querySelector('#nameButton');
-        this.createRoomDiv = document.getElementById('createRoomDiv');
+        this.createRoomDiv = div.querySelector('#createRoomDiv');
     }
 
     show(){
         this.div.style.display = 'block';
+
+        this.h1.innerText = this.dictionary.Setup;
 
         this.nameButton.onclick = () => {
             this.#onLogin(this.nameInput, this.roomTitleInput);

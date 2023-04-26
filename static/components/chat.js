@@ -5,7 +5,7 @@ function percent(current, max){
 }
 
 class ChatComponent{
-    constructor({div, dictionary}){
+    constructor({div, dictionary, h1}){
         this.div = div;
         this.dictionary = dictionary;
 
@@ -17,7 +17,7 @@ class ChatComponent{
         this.mediaInput = div.querySelector('#imageInput');
         this.mediaLabel = div.querySelector('#imageLabel');
         this.roomIdCopyButton = div.querySelector('#roomIdCopyButton');
-        this.h1 = document.getElementsByTagName('h1')[0];
+        this.h1 = h1;
         this.profileNameLabel = div.querySelector('#profileNameLabel');
         this.roomNameLabel = div.querySelector('#roomNameLabel');
         this.mediaElements = new Map();
@@ -28,6 +28,10 @@ class ChatComponent{
 
         this.h1.innerText = 'Node Chat';
         this.profileNameLabel.innerText = this.dictionary.Profile + ': ' + userName;
+        this.roomIdCopyButton.innerText = this.dictionary.roomIdCopy;
+        this.messageButton.innerText = this.dictionary.Send;
+        this.clearChatButton.innerText = this.dictionary.clearChat;
+        this.mediaLabel.innerText = this.dictionary.Media;
 
         const mediaManager = new MediaManager(socket,
             (data) => this.#onMediaReceive(data), 

@@ -1,4 +1,5 @@
 import { MediaManager } from '/network/media-manager.js';
+import { Time } from "/utils/time.js";
 
 function percent(current, max){
     return Math.floor(current * 100 / max) + '%';
@@ -88,8 +89,13 @@ class ChatScreen{
             mediaManager.clearUrls();
         }
 
-        this.roomLinkCopyButtom.onclick = () => {
+        this.roomLinkCopyButtom.onclick = async () => {
             navigator.clipboard.writeText(window.location.href);
+            this.roomLinkCopyButtom.disabled = true;
+            this.roomLinkCopyButtom.innerText = this.dictionary.roomLinkCopied;
+            await Time.delay(3000);
+            this.roomLinkCopyButtom.disabled = false;
+            this.roomLinkCopyButtom.innerText = this.dictionary.roomLinkCopy;
         }
     }
 

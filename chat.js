@@ -56,6 +56,7 @@ class Chat{
         socket.on('disconnect', () => this.#onDisconnect(socket));
         socket.on('message', (request) => this.#onMenssage(user, request));
         socket.on('media', (request) => this.#onMedia(user, request));
+        socket.on('media-cancel', () => this.#onMediaCancel(user));
         
         socket.emit('room-info', room.dto());
         for(const id of Object.keys(room.users)){
@@ -97,6 +98,14 @@ class Chat{
             user.socket.emit('media', new MediaChunk(sender.socket.id, sender.name, dataChunk, dataIndex, dataLength, type));
         }
         sender.socket.emit('chunk-send', new ChunkReceive(dataIndex, dataLength));
+    }
+
+    #onMediaCancel(sender){
+        const room = this.rooms[sender.roomId];
+        for(const id in room.users){
+            const user = room.users[id];
+            user.socket.emit('media-cancel', sender.socket.id);
+        }
     }
 }
 

@@ -7,12 +7,13 @@ async function blobToArray(blob){
 const CHUNK_SIZE = 8e5; //800kb
 
 class MediaManager{
-    constructor(socket, mediaReceiveListener, mediaSendListener, mediaCompleteListener){
+    constructor(socket, mediaReceiveListener, mediaSendListener, mediaCompleteListener, mediaCancelListener){
         this.medias = new Map();
         this.blobUrls = [];
         this.mediaReceiveListener = mediaReceiveListener;
         this.mediaSendListener = mediaSendListener;
         this.mediaCompleteListener = mediaCompleteListener;
+        this.mediaCancelListener = mediaCancelListener;
         this.socket = socket;
         this.sendingFile = null;
         this.sendingType = ''; 
@@ -22,15 +23,21 @@ class MediaManager{
         socket.on('media', (mediaData) => this.#onMedia(mediaData));
         socket.on('chunk-send', (chunkData) => this.#onChunkSend(chunkData));
         socket.on('disconnect', (message) => this.#onDisconnect(message));
+        socket.on('media-cancel', (userId) => this.#onMediaCancel(userId));
     }
 
     send(file){
-        if(this.#isSending())
+        if(this.isSending())
             return;
 
         this.sendingFile = file;
         this.sendingType = file.type;
         this.#send();
+    }
+
+    cancel(){
+        this.#resetSend();
+        this.socket.emit('media-cancel');
     }
 
     clearUrls(){
@@ -40,8 +47,16 @@ class MediaManager{
         this.blobUrls = [];
     }
 
+    #onMediaCancel(userId){
+        delete this.medias[userId];
+        this.mediaCancelListener(userId);
+    }
+
     async #onMedia(mediaData){
         const {userId, userName, dataChunk, dataIndex, dataLength, type} = mediaData;
+        if(!this.medias[userId] && dataIndex > 0){
+            return;
+        }
         const media = this.medias[userId] ? this.medias[userId] : this.#newMedia();
         const binaryChunk = this.binaryStringParser.stringToBinary(dataChunk);
         media.chunks.push(binaryChunk);
@@ -67,7 +82,7 @@ class MediaManager{
     async #onChunkSend(chunkData){
         const {dataIndex, dataLength} = chunkData;
         this.mediaSendListener(chunkData);
-        if(dataIndex < dataLength){
+        if(dataIndex < dataLength && this.isSending()){
             await this.#send();
         }else{
             this.#resetSend();
@@ -75,7 +90,6 @@ class MediaManager{
     }
 
     #onDisconnect(msg){
-        console.log('Disconnect: ', msg);
         this.medias = new Map();
         this.#resetSend();
     }
@@ -86,7 +100,7 @@ class MediaManager{
         this.sendingIndex = 0;
     }
 
-    #isSending(){
+    isSending(){
         return this.sendingFile != null;
     }
 

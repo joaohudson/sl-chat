@@ -39,7 +39,8 @@ class ChatScreen{
         const mediaManager = new MediaManager(socket,
             (data) => this.#onMediaReceive(data), 
             (data) => this.#onMediaSend(data), 
-            (data) => this.#onMediaComplete(data));
+            (data) => this.#onMediaComplete(data),
+            (userId) => this.#onMediaCancel(userId));
 
         socket.on('room-info', (room) => {
             this.#setRoomId(room.id);
@@ -87,8 +88,14 @@ class ChatScreen{
             this.#sendMedia(mediaManager);
         }
 
-        this.mediaButton.onclick = () => {
-            this.mediaInput.click();
+        this.mediaButton.onclick = async () => {
+            if(mediaManager.isSending()){
+                if(await this.dialogPanel.showConfirmMessage('Tem certeza que deseja cancelar o envio?')){
+                    mediaManager.cancel();
+                }
+            }else{
+                this.mediaInput.click();
+            }
         }
 
         this.clearChatButton.onclick = async () => {
@@ -127,7 +134,6 @@ class ChatScreen{
     }
 
     #setSending(sending){
-        this.mediaButton.disabled = sending;
         if(sending){
             this.mediaButton.innerText = '. . .';
         }else{
@@ -185,6 +191,14 @@ class ChatScreen{
                 this.#pushVideoMessage(li, userName, url, userColor);
                 break;
         }
+    }
+
+    #onMediaCancel(userId){
+        if(this.mediaElements.has(userId)){
+            this.mediaElements.get(userId).remove();
+            this.mediaElements.delete(userId);
+        }
+        this.mediaButton.innerText = this.dictionary.Media;
     }
 
     #pushImageMessage(li, name, url, colorName){

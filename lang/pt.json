@@ -17,5 +17,6 @@
     "Ok": "Ok",
     "Yes": "sim",
     "No": "Não",
-    "confirmMessageClearChat": "Tem certeza que deseja apagar a conversa?"
+    "confirmMessageClearChat": "Tem certeza que deseja apagar a conversa?",
+    "confirmMediaCancel": "Tem certeza que deseja cancelar o envio?"
 }

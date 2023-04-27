@@ -17,5 +17,6 @@
     "Ok": "Ok",
     "Yes": "Yes",
     "No": "No",
-    "confirmMessageClearChat": "Are you sure you want to delete the conversation?"
+    "confirmMessageClearChat": "Are you sure you want to delete the conversation?",
+    "confirmMediaCancel": "Are you sure you want to cancel the submission?"
 }

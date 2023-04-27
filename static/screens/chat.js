@@ -90,7 +90,7 @@ class ChatScreen{
 
         this.mediaButton.onclick = async () => {
             if(mediaManager.isSending()){
-                if(await this.dialogPanel.showConfirmMessage('Tem certeza que deseja cancelar o envio?')){
+                if(await this.dialogPanel.showConfirmMessage(this.dictionary.confirmMediaCancel)){
                     mediaManager.cancel();
                 }
             }else{

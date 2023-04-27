@@ -17,5 +17,6 @@
     "Ok": "Ok",
     "Yes": "Sí",
     "No": "No",
-    "confirmMessageClearChat": "¿Seguro que quieres eliminar la conversación?"
+    "confirmMessageClearChat": "¿Seguro que quieres eliminar la conversación?",
+    "confirmMediaCancel": "¿Está seguro de que desea cancelar el envío?"
 }

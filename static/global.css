@@ -66,6 +66,10 @@ h1{
     overflow: auto;
 }
 .inputDiv{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     background-color: rgba(88, 67, 22, 0.575);
     padding: 15px;
     margin-top: 5px;
@@ -85,6 +89,8 @@ h1{
 }
 .messageInput{
     text-align: start;
+    width: 80%;
+    max-width: 350px;
 }
 .imageInput{
     visibility: hidden;
@@ -99,6 +105,7 @@ h1{
     font-size: 12px;
 }
 .sendButton{
+    margin: 5px;
     width: 60px;
     height: 35px;
 }
@@ -232,8 +239,12 @@ h1{
 }
 
 /*for tiny mobile*/
-@media only screen and (max-width: 360px){
-    .messageInput{
-        width: 120px;
+@media only screen and (max-width: 300px){
+    .sendButton{
+        width: 40px;
+        height: 40px;
+    }
+    button{
+        font-size: 10px;
     }
 }

@@ -75,14 +75,11 @@ class ChatScreen{
         });
 
         this.messageInput.onkeydown = (e) => {
+            this.messageButton.innerText = this.messageInput.value ? this.dictionary.Send : this.dictionary.Audio;
             if(e.key == 'Enter'){
                 e.preventDefault();
                 this.#sendMessage(socket, mediaManager);
             }
-        }
-
-        this.messageInput.onkeydown = () => {
-            this.messageButton.innerText = this.messageInput.value ? this.dictionary.Send : this.dictionary.Audio;
         }
         
         this.messageButton.onclick = () =>{

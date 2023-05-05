@@ -75,15 +75,22 @@ class ChatScreen{
         });
 
         this.messageInput.onkeydown = (e) => {
-            this.#onMessageTextChange();
-            if(e.key == 'Enter'){
+            if(e.key == 'Enter' && this.messageInput.value){
                 e.preventDefault();
-                this.#sendMessage(socket, mediaManager);
+                this.#sendMessage(socket);
             }
+        }
+
+        this.messageInput.onkeyup = () => {
+            this.messageButton.innerText = this.messageInput.value ? this.dictionary.Send : this.dictionary.Audio;
         }
         
         this.messageButton.onclick = () =>{
-            this.#sendMessage(socket, mediaManager);
+            if(this.messageInput.value){
+                this.#sendMessage(socket);
+            }else{
+                this.#sendAudio(mediaManager);
+            }
         };
 
         this.mediaInput.onchange = async () => {
@@ -117,21 +124,16 @@ class ChatScreen{
         }
     }
 
-    #onMessageTextChange(){
-        this.messageButton.innerText = this.messageInput.value ? this.dictionary.Send : this.dictionary.Audio;
+    async #sendAudio(mediaManager){
+        const blob = await this.audioRecorderPanel.show();
+        if(blob){
+            mediaManager.send(blob);
+        }
     }
 
-    async #sendMessage(socket, mediaManager){
-        if(!this.messageInput.value){//audio messgae
-            const blob = await this.audioRecorderPanel.show();
-            if(blob){
-                mediaManager.send(blob);
-            }
-        }else{//text message
-            socket.emit('message', {content: this.messageInput.value});
-            this.messageInput.value = '';
-            this.#onMessageTextChange();
-        }
+    async #sendMessage(socket){
+        socket.emit('message', {content: this.messageInput.value});
+        this.messageInput.value = '';
     }
 
     #sendMedia(mediaManager){

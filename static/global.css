@@ -256,6 +256,10 @@ h1{
        width: 90%;
        height: 60%; 
     }
+    .audioRecorderSubPanel{
+        width: 90%;
+        height: 60%;
+    }
     .messageDiv{
         margin-left: 10px;
         margin-right: 10px;

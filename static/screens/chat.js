@@ -75,7 +75,7 @@ class ChatScreen{
         });
 
         this.messageInput.onkeydown = (e) => {
-            this.messageButton.innerText = this.messageInput.value ? this.dictionary.Send : this.dictionary.Audio;
+            this.#onMessageTextChange();
             if(e.key == 'Enter'){
                 e.preventDefault();
                 this.#sendMessage(socket, mediaManager);
@@ -117,6 +117,10 @@ class ChatScreen{
         }
     }
 
+    #onMessageTextChange(){
+        this.messageButton.innerText = this.messageInput.value ? this.dictionary.Send : this.dictionary.Audio;
+    }
+
     async #sendMessage(socket, mediaManager){
         if(!this.messageInput.value){//audio messgae
             const blob = await this.audioRecorderPanel.show();
@@ -126,6 +130,7 @@ class ChatScreen{
         }else{//text message
             socket.emit('message', {content: this.messageInput.value});
             this.messageInput.value = '';
+            this.#onMessageTextChange();
         }
     }
 

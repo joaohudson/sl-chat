@@ -6,12 +6,13 @@ function percent(current, max){
 }
 
 class ChatScreen{
-    constructor({div, dictionary, h1, loadingPanel, dialogPanel}){
+    constructor({div, dictionary, h1, loadingPanel, dialogPanel, audioRecorderPanel}){
         this.div = div;
         this.dictionary = dictionary;
 
         this.loadingPanel = loadingPanel;
         this.dialogPanel = dialogPanel;
+        this.audioRecorderPanel = audioRecorderPanel;
         this.messageList = div.querySelector('#messageList');
         this.messageDiv = div.querySelector('#messageDiv');
         this.messageInput = div.querySelector('#messageInput');
@@ -76,12 +77,16 @@ class ChatScreen{
         this.messageInput.onkeydown = (e) => {
             if(e.key == 'Enter'){
                 e.preventDefault();
-                this.#sendMessage(socket);
+                this.#sendMessage(socket, mediaManager);
             }
+        }
+
+        this.messageInput.onchange = () => {
+            this.messageButton.innerText = this.mediaInput.value ? this.dictionary.Send : this.dictionary.Audio;
         }
         
         this.messageButton.onclick = () =>{
-            this.#sendMessage(socket);
+            this.#sendMessage(socket, mediaManager);
         };
 
         this.mediaInput.onchange = async () => {
@@ -115,12 +120,16 @@ class ChatScreen{
         }
     }
 
-    #sendMessage(socket){
-        if(!this.messageInput.value){
-            return;
+    async #sendMessage(socket, mediaManager){
+        if(!this.messageInput.value){//audio messgae
+            const blob = await this.audioRecorderPanel.show();
+            if(blob){
+                mediaManager.send(blob);
+            }
+        }else{//text message
+            socket.emit('message', {content: this.messageInput.value});
+            this.messageInput.value = '';
         }
-        socket.emit('message', {content: this.messageInput.value});
-        this.messageInput.value = '';
     }
 
     #sendMedia(mediaManager){

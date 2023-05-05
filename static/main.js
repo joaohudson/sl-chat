@@ -2,7 +2,7 @@ import { SetupScreen } from "/screens/setup.js"
 import { ChatScreen } from "/screens/chat.js";
 import { LoadingPanel } from "/panels/loading-panel.js";
 import { DialogPanel } from "/panels/dialog.js";
-
+import { AudioRecorderPanel } from "/panels/audio-recorder.js";
 const [h1] = document.getElementsByTagName('h1');
 
 async function fetchDictionary(){
@@ -28,12 +28,18 @@ async function main(){
         });
         loadingPanel.hide();
 
+        const audioRecorderPanel = new AudioRecorderPanel({
+            div: document.getElementById('audioRecorderPanelDiv'),
+            dictionary: dictionary
+        });
+
         const chatScreen = new ChatScreen({
             div: document.getElementById('chatDiv'),
             h1: h1,
             loadingPanel: loadingPanel,
             dialogPanel: dialogPanel,
-            dictionary: dictionary
+            dictionary: dictionary,
+            audioRecorderPanel: audioRecorderPanel
         });
 
         const setupScreen = new SetupScreen({

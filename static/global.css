@@ -124,6 +124,52 @@ h1{
     margin-left: 20%;
     overflow-x: auto;
 }
+.audioRecorderPanel{
+    display: flex;
+    z-index: 500;
+    position: absolute;
+    top: 0;
+    left: 0;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: #00000050;
+    border-radius: 0px;
+}
+.audioRecorderSubPanel{
+    display: flex;
+    width: 400px;
+    height: 250px;
+    margin: 0 auto;
+    flex-direction: column;
+    background-color: #ec9646;
+}
+.audioRecorderButtonDiv{
+    display: flex;
+    flex-direction: row;
+    margin: 10px 20px;
+    height: 10%;
+    justify-content: space-around;
+}
+.audioRecorderButton{
+    width: 80px;
+    height: 30px;
+}
+.displayAudioRecorder{
+    font-weight: bold;
+    text-align: center;
+    margin: 0 auto;
+}
+.displayAudioRecorderDiv{
+    display: flex;
+    margin: 10px 20px;
+    margin-top: 30px;
+    word-wrap: break-word;
+    overflow-y: auto;
+    height: 80%;
+    text-align: center;
+    align-items: center;
+}
 .dialogPanel{
     display: flex;
     z-index: 1000;

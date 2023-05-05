@@ -10,6 +10,7 @@
     "UserName": "User Name",
     "Setup": "Setup",
     "Send": "Send",
+    "Cancel": "Cancel",
     "roomLinkCopy": "Copy Link",
     "roomLinkCopied": "Link Copied!",
     "clearChat": "Clear Chat",
@@ -18,5 +19,7 @@
     "Yes": "Yes",
     "No": "No",
     "confirmMessageClearChat": "Are you sure you want to delete the conversation?",
-    "confirmMediaCancel": "Are you sure you want to cancel the submission?"
+    "confirmMediaCancel": "Are you sure you want to cancel the submission?",
+    "Recording": "Recording . . .",
+    "Audio": "Áudio"
 }

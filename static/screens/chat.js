@@ -33,7 +33,7 @@ class ChatScreen{
         this.h1.innerText = 'Node Chat';
         this.profileNameLabel.innerText = this.dictionary.Profile + ': ' + userName;
         this.roomLinkCopyButtom.innerText = this.dictionary.roomLinkCopy;
-        this.messageButton.innerText = this.dictionary.Send;
+        this.messageButton.innerText = this.dictionary.Audio;
         this.clearChatButton.innerText = this.dictionary.clearChat;
         this.mediaButton.innerText = this.dictionary.Media;
 
@@ -81,8 +81,8 @@ class ChatScreen{
             }
         }
 
-        this.messageInput.onchange = () => {
-            this.messageButton.innerText = this.mediaInput.value ? this.dictionary.Send : this.dictionary.Audio;
+        this.messageInput.onkeydown = () => {
+            this.messageButton.innerText = this.messageInput.value ? this.dictionary.Send : this.dictionary.Audio;
         }
         
         this.messageButton.onclick = () =>{

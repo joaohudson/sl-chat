@@ -157,15 +157,26 @@ h1{
 }
 .displayAudioRecorder{
     font-weight: bold;
+    font-size: 18px;
     text-align: center;
-    margin: 0 auto;
 }
 .displayAudioRecorderDiv{
+    display: block;
+    margin-top: 15px;
+    text-align: center;
+    align-items: center;
+}
+.timeAudioRecorder{
+    font-weight: bold;
+    font-size: 56px;
+    text-align: center;
+}
+.timeAudioRecorderDiv{
     display: flex;
+    flex-direction: column;
+    justify-content: center;
     margin: 10px 20px;
     margin-top: 30px;
-    word-wrap: break-word;
-    overflow-y: auto;
     height: 80%;
     text-align: center;
     align-items: center;

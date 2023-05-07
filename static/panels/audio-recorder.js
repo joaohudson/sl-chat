@@ -10,6 +10,7 @@ class AudioRecorderPanel{
     constructor({div, dictionary}){
         this.div = div;
         this.dictionary = dictionary;
+        this.showing = false;
         this.audioRecorder = new AudioRecorder();
         this.displayAudioRecorder = div.querySelector('#displayAudioRecorder');
         this.audioRecorderSendButton = div.querySelector('#audioRecorderSendButton');
@@ -18,6 +19,10 @@ class AudioRecorderPanel{
     }
 
     async show(){
+        if(this.showing){
+            throw new Error('Panel has been showing!');
+        }
+        this.showing = true;
         this.div.style.display = '';
         
         this.displayAudioRecorder.innerText = this.dictionary.Recording;
@@ -52,6 +57,7 @@ class AudioRecorderPanel{
         clearInterval(this.timeInterval);
         this.#hide();
         this.#resetTime();
+        this.showing = false;
     }
 
     #resetTime(){

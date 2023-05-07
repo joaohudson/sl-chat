@@ -301,6 +301,9 @@ h1{
 
 /*for tiny mobile*/
 @media only screen and (max-width: 300px){
+    .timeAudioRecorder{
+        font-size: 38px;
+    }
     .sendButton{
         width: 40px;
         height: 40px;

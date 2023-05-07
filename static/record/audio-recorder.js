@@ -47,7 +47,8 @@ class AudioRecorder{
     }
 
     #getData(){
-        return new Blob(this.#chunks, {type: 'audio/mp3'});
+        const type = this.#chunks.length ? this.#chunks[0].type : 'audio/mp3';
+        return new Blob(this.#chunks, {type});
     }
 
     #receiveData(data){

@@ -1,54 +1,66 @@
 class AudioRecorder{
     #chunks
     #recorder
+    #initTime
     constructor(){
+        this.#initTime = 0;
         this.#chunks = [];
         this.#recorder = null;
     }
 
     async complete(){
         if(!this.#recorder){
-            console.error('Mutiples completes');
-            return;
+            throw new Error('Mutiples completes');
         }
-        this.#recorder.addEventListener('dataavailable', ({data}) => {
-            this.#onData(data);
-        });
-        this.#recorder.stop();
         return new Promise((res) => {
-            this.#recorder.addEventListener('stop', () => {
-                res(this.#onStop());
-            });
+            this.#recorder.onstop = () => {
+                res(this.#getData());
+                this.#dispose();
+            }
+            this.#recorder.stop();
         });
     }
 
     cancel(){
         if(!this.#recorder){
-            console.error('Mutiples stops');
-            return;
+            throw new Error('Mutiples audio recorder!');
         }
+        this.#recorder.onstop = () => this.#dispose();
         this.#recorder.stop();
-        this.#recorder = null;
     }
 
     async record(){
         if(this.#recorder){
-            console.error('Mutiples audio recorder!');
-            return;
+            throw new Error('Mutiples audio recorder!');
         }
         this.#recorder = await this.#newAudioRecorder();
+        this.#recorder.ondataavailable = ({data}) => this.#receiveData(data);
         this.#recorder.start();
+        this.#onStart();
     }
 
-    #onData(data){
+    getTime(){
+        if(!this.#recorder){
+            throw new Error('Recorder dont playing!');
+        }
+        return Date.now() - this.#initTime;
+    }
+
+    #getData(){
+        return new Blob(this.#chunks, {type: 'audio/mp3'});
+    }
+
+    #receiveData(data){
         this.#chunks.push(data);
     }
 
-    #onStop(){
-        const blob = new Blob(this.#chunks, {type: 'audio/mp3'});
+    #onStart(){
+        this.#initTime = Date.now();
+    }
+
+    #dispose(){
         this.#chunks = [];
         this.#recorder = null;
-        return blob;
     }
 
     async #newAudioRecorder(){

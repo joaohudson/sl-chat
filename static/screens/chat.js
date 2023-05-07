@@ -253,6 +253,7 @@ class ChatScreen{
         li.appendChild(nameSpan);
         const audioSpan = document.createElement('span');
         const audio = document.createElement('audio');
+        audio.volume = 1;
         audio.className = 'audioMessage';
         audio.controls = true;
         audio.src = url;

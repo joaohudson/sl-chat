@@ -1,6 +1,6 @@
 const languages = require('./lang/index.json');
 
-class Dictionary{
+class Translator{
     constructor(){
         this.dictionaries = {};
         for(const lang of languages){
@@ -20,5 +20,5 @@ class Dictionary{
 }
 
 module.exports = {
-    Dictionary
+    Translator
 }

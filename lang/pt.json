@@ -21,5 +21,6 @@
     "confirmMessageClearChat": "Tem certeza que deseja apagar a conversa?",
     "confirmMediaCancel": "Tem certeza que deseja cancelar o envio?",
     "Recording": "Gravando . . .",
-    "Audio": "Áudio"
+    "Audio": "Áudio",
+    "DownloadFile": "Baixar Arquivo"
 }

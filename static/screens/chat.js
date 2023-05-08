@@ -53,7 +53,7 @@ class ChatScreen{
         socket.on('message', async (msg) => {
             const mySocket = msg.id == socket.id; 
             const userColor =  mySocket ? 'darkturquoise' : 'white';
-            this.#pushScreenMessage(msg.name, msg.content, userColor, 'orange');
+            this.#pushTextMessage(msg.name, msg.content, userColor, 'orange');
         });
 
         socket.on('disconnect', () => {
@@ -62,11 +62,11 @@ class ChatScreen{
         
         socket.on('enterer', (user) => {
             const name = user.id == socket.id ? this.dictionary.You : user.name;
-            this.#pushScreenMessage(name, ' ' + this.dictionary.enteredRoom, 'gray', 'gray');
+            this.#pushTextMessage(name, ' ' + this.dictionary.enteredRoom, 'gray', 'gray');
         });
 
         socket.on('exit', (user) => {
-            this.#pushScreenMessage(user.name, ' ' + this.dictionary.hasLeftRoom, 'gray', 'gray');
+            this.#pushTextMessage(user.name, ' ' + this.dictionary.hasLeftRoom, 'gray', 'gray');
         });
 
         socket.on('connect_error', async (error) => {
@@ -165,7 +165,7 @@ class ChatScreen{
         const userColor = mySelf ? 'darkturquoise' : 'white';
         if(dataIndex == 0){
             const message = type + '[0%]';
-            const li = this.#pushScreenMessage(userName, message, userColor, userColor);
+            const li = this.#pushTextMessage(userName, message, userColor, userColor);
             this.mediaElements.set(userId, li);
         }else{
             if(!this.mediaElements.has(userId)){
@@ -187,23 +187,10 @@ class ChatScreen{
 
     #onMediaComplete(data){
         const {mySelf, userId, userName, url, type} = data;
-        const shortType = type.split('/')[0];
         const userColor = mySelf ? 'darkturquoise' : 'white';
         const li = this.mediaElements.get(userId);
         li.innerText = '';
-        switch(shortType){
-            case 'audio':
-                this.#pushAudioMessage(li, userName, url, userColor);
-                break;
-
-            case 'image':
-                this.#pushImageMessage(li, userName, url, userColor);
-                break;
-
-            case 'video':
-                this.#pushVideoMessage(li, userName, url, userColor);
-                break;
-        }
+        this.#pushMediaMessage(li, userName, url, userColor, type);
     }
 
     #onMediaCancel(userId){
@@ -214,69 +201,81 @@ class ChatScreen{
         this.mediaButton.innerText = this.dictionary.Media;
     }
 
-    #pushImageMessage(li, name, url, colorName){
+    #pushMediaMessage(li, name, src, colorName, type){
         const nameSpan = document.createElement('span');
-        nameSpan.className = 'message';
+        nameSpan.classList.add('message');
         nameSpan.style.color = colorName;
         nameSpan.innerText = name + ': ';
         li.appendChild(nameSpan);
-        const imgDiv = document.createElement('div');
-        const img = document.createElement('img');
-        img.className = 'imageMessage';
-        img.src = url;
-        imgDiv.appendChild(img);
-        li.appendChild(imgDiv);
+        const mediaDiv = document.createElement('div');
+        const media = this.#buildMediaElement(type, src);
+        mediaDiv.appendChild(media);
+        li.appendChild(mediaDiv);
         this.messageDiv.scrollTop = this.messageDiv.scrollHeight;
     }
     
-    #pushVideoMessage(li, name, url, colorName){
-        const nameSpan = document.createElement('span');
-        nameSpan.className = 'message';
-        nameSpan.style.color = colorName;
-        nameSpan.innerText = name + ': ';
-        li.appendChild(nameSpan);
-        const videoDiv = document.createElement('div');
-        const video = document.createElement('video');
-        video.className = 'imageMessage';
-        video.controls = true;
-        video.src = url;
-        videoDiv.appendChild(video);
-        li.appendChild(videoDiv);
-        this.messageDiv.scrollTop = messageDiv.scrollHeight;
-    }
-    
-    #pushAudioMessage(li, name, url, colorName){
-        const nameSpan = document.createElement('span');
-        nameSpan.className = 'message';
-        nameSpan.style.color = colorName;
-        nameSpan.innerText = name + ': ';
-        li.appendChild(nameSpan);
-        const audioSpan = document.createElement('span');
-        const audio = document.createElement('audio');
-        audio.volume = 1;
-        audio.className = 'audioMessage';
-        audio.controls = true;
-        audio.src = url;
-        audioSpan.appendChild(audio);
-        li.appendChild(audioSpan);
-        this.messageDiv.scrollTop = this.messageDiv.scrollHeight;
-    }
-    
-    #pushScreenMessage(name, message, colorName, colorMessage){
+    #pushTextMessage(name, message, colorName, colorMessage){
         const li = document.createElement('li');
         const nameSpan = document.createElement('span');
-        nameSpan.className = 'message';
+        nameSpan.classList.add('message');
         nameSpan.style.color = colorName;
         nameSpan.innerText = name + ': ';
         li.appendChild(nameSpan);
         const messageSpan = document.createElement('span');
-        messageSpan.className = 'message';
+        messageSpan.classList.add('message');
         messageSpan.style.color = colorMessage;
         messageSpan.innerText = message;
         li.appendChild(messageSpan);
         this.messageList.appendChild(li);
         this.messageDiv.scrollTop = messageDiv.scrollHeight;
         return li;
+    }
+
+    #buildMediaElement(type, src){
+        const [shortType] = type.split('/');
+        switch(shortType){
+            case 'audio':
+                return this.#buildAudioElement(src);
+            case 'video':
+                return this.#buildVideoElement(src);
+            case 'image':
+                return this.#buildImageElement(src);
+            default:
+                return this.#buildFileElement(src, type);
+        }
+    }
+
+    #buildAudioElement(src){
+        const audio = document.createElement('audio');
+        audio.volume = 1;
+        audio.classList.add('audioMessage');
+        audio.controls = true;
+        audio.src = src;
+        return audio;
+    }
+
+    #buildVideoElement(src){
+        const video = document.createElement('video');
+        video.classList.add('imageMessage');
+        video.controls = true;
+        video.src = src;
+        return video;
+    }
+
+    #buildImageElement(src){
+        const img = document.createElement('img');
+        img.classList.add('imageMessage');
+        img.src = src;
+        return img;
+    }
+
+    #buildFileElement(src){
+        const a = document.createElement('a');
+        a.classList.add('fileMessage');
+        a.href = src;
+        a.download = Date.now();
+        a.innerText = this.dictionary.DownloadFile;
+        return a;
     }
 }
 

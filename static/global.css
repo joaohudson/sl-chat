@@ -87,6 +87,15 @@ h1{
     height: 26px;
     border-radius: 25px;
 }
+.fileMessage{
+    font-weight: bold;
+    font-size: 12px;
+    background-color: #ec9646;
+    color: black;
+    text-decoration: none;
+    border-radius: 25px;
+    padding: 0 4px;
+}
 .messageInput{
     text-align: start;
     width: 80%;

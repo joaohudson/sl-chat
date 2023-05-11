@@ -17,6 +17,7 @@ class ChatScreen{
         this.messageDiv = div.querySelector('#messageDiv');
         this.messageInput = div.querySelector('#messageInput');
         this.messageButton = div.querySelector('#messageButton');
+        this.audioButton = div.querySelector('#audioButton');
         this.clearChatButton = div.querySelector('#clearChatButton');
         this.mediaInput = div.querySelector('#imageInput');
         this.mediaButton = div.querySelector('#mediaButton');
@@ -33,7 +34,8 @@ class ChatScreen{
         this.h1.innerText = 'Node Chat';
         this.profileNameLabel.innerText = this.dictionary.Profile + ': ' + userName;
         this.roomLinkCopyButtom.innerText = this.dictionary.roomLinkCopy;
-        this.messageButton.innerText = this.dictionary.Audio;
+        this.messageButton.innerText = this.dictionary.Send;
+        this.audioButton.innerText = this.dictionary.Audio;
         this.clearChatButton.innerText = this.dictionary.clearChat;
         this.mediaButton.innerText = this.dictionary.Media;
 
@@ -81,21 +83,13 @@ class ChatScreen{
             }
         }
 
-        this.messageInput.onkeyup = () => {
-            this.messageButton.innerText = this.messageInput.value ? this.dictionary.Send : this.dictionary.Audio;
-        }
+        this.messageInput.onkeyup = () => this.#updateSendButtton();
         
-        this.messageButton.onclick = () =>{
-            if(this.messageInput.value){
-                this.#sendMessage(socket);
-            }else{
-                this.#sendAudio(mediaManager);
-            }
-        };
+        this.messageButton.onclick = () => this.#sendMessage(socket);
 
-        this.mediaInput.onchange = async () => {
-            this.#sendMedia(mediaManager);
-        }
+        this.audioButton.onclick = () => this.#sendAudio(mediaManager);
+
+        this.mediaInput.onchange = async () => this.#sendMedia(mediaManager);
 
         this.mediaButton.onclick = async () => {
             if(mediaManager.isSending()){
@@ -124,6 +118,21 @@ class ChatScreen{
         }
     }
 
+    #updateSendButtton(){
+        if(this.messageInput.value) {
+            this.messageButton.style.display = '';
+            this.audioButton.style.display = 'none';
+        } else{
+            this.messageButton.style.display = 'none';
+            this.audioButton.style.display = '';
+        }
+    }
+
+    #clearMessageInput(){
+        this.messageInput.value = '';
+        this.#updateSendButtton();
+    }
+
     async #sendAudio(mediaManager){
         const blob = await this.audioRecorderPanel.show();
         if(blob){
@@ -133,7 +142,7 @@ class ChatScreen{
 
     async #sendMessage(socket){
         socket.emit('message', {content: this.messageInput.value});
-        this.messageInput.value = '';
+        this.#clearMessageInput();
     }
 
     #sendMedia(mediaManager){

@@ -83,7 +83,7 @@ class ChatScreen{
             }
         }
 
-        this.messageInput.onkeyup = () => this.#updateSendButtton();
+        this.messageInput.oninput = () => this.#updateSendButtton();
         
         this.messageButton.onclick = () => this.#sendMessage(socket);
 

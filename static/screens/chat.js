@@ -135,6 +135,7 @@ class ChatScreen{
 
     async #sendAudio(mediaManager){
         const blob = await this.audioRecorderPanel.show();
+        this.#setSending(blob != null);
         if(blob){
             mediaManager.send(blob);
         }
@@ -158,7 +159,9 @@ class ChatScreen{
     #setSending(sending){
         if(sending){
             this.mediaButton.innerText = '. . .';
+            this.audioButton.disabled = true;
         }else{
+            this.audioButton.disabled = false;
             this.mediaButton.innerText = this.dictionary.Media;
         }
     }
@@ -189,7 +192,6 @@ class ChatScreen{
     #onMediaSend(data){
         const {dataIndex, dataLength} = data;
         this.mediaButton.innerText = percent(dataIndex, dataLength);
-        this.audioButton.disabled = true;
         if(dataIndex == dataLength){
             this.#setSending(false);
             this.audioButton.disabled = false;
@@ -210,8 +212,7 @@ class ChatScreen{
             this.mediaElements.get(userId).remove();
             this.mediaElements.delete(userId);
         }
-        this.mediaButton.innerText = this.dictionary.Media;
-        this.audioButton.disabled = false;
+        this.#setSending(false);
     }
 
     #getDisplayType(type){

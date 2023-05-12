@@ -22,5 +22,8 @@
     "confirmMediaCancel": "Are you sure you want to cancel the submission?",
     "Recording": "Recording . . .",
     "Audio": "Audio",
+    "Image": "Image",
+    "Video": "Video",
+    "File": "File",
     "DownloadFile": "Download File"
 }

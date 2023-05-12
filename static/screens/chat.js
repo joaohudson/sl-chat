@@ -172,8 +172,9 @@ class ChatScreen{
     #onMediaReceive(data){
         const {userId, userName, dataIndex, dataLength, type, mySelf} = data;
         const userColor = mySelf ? 'darkturquoise' : 'white';
+        const displayType = this.#getDisplayType(type);
         if(dataIndex == 0){
-            const message = type + '[0%]';
+            const message = displayType + ' [0%]';
             const li = this.#pushTextMessage(userName, message, userColor, userColor);
             this.mediaElements.set(userId, li);
         }else{
@@ -181,7 +182,7 @@ class ChatScreen{
                 return;
             }
             const span = this.mediaElements.get(userId).getElementsByTagName('span')[1];
-            span.innerText = type + '['+percent(dataIndex, dataLength)+']';
+            span.innerText = displayType + ' ['+percent(dataIndex, dataLength)+']';
         }
     }
 
@@ -208,6 +209,20 @@ class ChatScreen{
             this.mediaElements.delete(userId);
         }
         this.mediaButton.innerText = this.dictionary.Media;
+    }
+
+    #getDisplayType(type){
+        const [shortType] = type.split('/');
+        switch(shortType){
+            case 'image':
+                return this.dictionary.Image;
+            case 'video':
+                return this.dictionary.Video;
+            case 'audio':
+                return this.dictionary.Audio;
+            default:
+                return this.dictionary.File;
+        }
     }
 
     #pushMediaMessage(li, name, src, colorName, type){

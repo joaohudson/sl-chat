@@ -22,5 +22,8 @@
     "confirmMediaCancel": "¿Está seguro de que desea cancelar el envío?",
     "Recording": "Grabando . . .",
     "Audio": "Audio",
+    "Image": "Imagen",
+    "Video": "Video",
+    "File": "Archivo",
     "DownloadFile": "Descargar archivo"
 }

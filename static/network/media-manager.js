@@ -80,9 +80,12 @@ class MediaManager{
     }
 
     async #onChunkSend(chunkData){
+        if(!this.isSending()){
+            return;
+        }
         const {dataIndex, dataLength} = chunkData;
         this.mediaSendListener(chunkData);
-        if(dataIndex < dataLength && this.isSending()){
+        if(dataIndex < dataLength){
             await this.#send();
         }else{
             this.#resetSend();

@@ -189,8 +189,10 @@ class ChatScreen{
     #onMediaSend(data){
         const {dataIndex, dataLength} = data;
         this.mediaButton.innerText = percent(dataIndex, dataLength);
+        this.audioButton.disabled = true;
         if(dataIndex == dataLength){
             this.#setSending(false);
+            this.audioButton.disabled = false;
             this.mediaButton.innerText = this.dictionary.Media;
         }
     }
@@ -209,6 +211,7 @@ class ChatScreen{
             this.mediaElements.delete(userId);
         }
         this.mediaButton.innerText = this.dictionary.Media;
+        this.audioButton.disabled = false;
     }
 
     #getDisplayType(type){

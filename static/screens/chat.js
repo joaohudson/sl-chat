@@ -6,13 +6,14 @@ function percent(current, max){
 }
 
 class ChatScreen{
-    constructor({div, dictionary, h1, loadingPanel, dialogPanel, audioRecorderPanel}){
+    constructor({div, dictionary, h1, loadingPanel, dialogPanel, audioRecorderPanel, imagePanel}){
         this.div = div;
         this.dictionary = dictionary;
 
         this.loadingPanel = loadingPanel;
         this.dialogPanel = dialogPanel;
         this.audioRecorderPanel = audioRecorderPanel;
+        this.imagePanel = imagePanel;
         this.messageList = div.querySelector('#messageList');
         this.messageDiv = div.querySelector('#messageDiv');
         this.messageInput = div.querySelector('#messageInput');
@@ -294,6 +295,9 @@ class ChatScreen{
         const img = document.createElement('img');
         img.classList.add('imageMessage');
         img.src = src;
+        img.onclick = () => {
+            this.imagePanel.show(src);
+        }
         return img;
     }
 

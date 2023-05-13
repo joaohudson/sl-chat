@@ -133,6 +133,23 @@ h1{
     margin-left: 20%;
     overflow-x: auto;
 }
+.imagePanel{
+    display: flex;
+    position: absolute;
+    z-index: 300;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    border-radius: 0;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+.contentImagePanel{
+    margin: 0 auto;
+}
 .audioRecorderPanel{
     display: flex;
     z-index: 500;

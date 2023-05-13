@@ -3,6 +3,8 @@ import { ChatScreen } from "/screens/chat.js";
 import { LoadingPanel } from "/panels/loading-panel.js";
 import { DialogPanel } from "/panels/dialog.js";
 import { AudioRecorderPanel } from "/panels/audio-recorder.js";
+import { ImagePanel } from "/panels/image.js";
+
 const [h1] = document.getElementsByTagName('h1');
 
 async function fetchDictionary(){
@@ -33,13 +35,18 @@ async function main(){
             dictionary: dictionary
         });
 
+        const imagePanel = new ImagePanel({
+            div: document.getElementById('imagePanelDiv')
+        });
+
         const chatScreen = new ChatScreen({
             div: document.getElementById('chatDiv'),
             h1: h1,
             loadingPanel: loadingPanel,
             dialogPanel: dialogPanel,
             dictionary: dictionary,
-            audioRecorderPanel: audioRecorderPanel
+            audioRecorderPanel: audioRecorderPanel,
+            imagePanel: imagePanel
         });
 
         const setupScreen = new SetupScreen({

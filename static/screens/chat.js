@@ -1,6 +1,11 @@
 import { MediaManager } from '/network/media-manager.js';
 import { Time } from "/utils/time.js";
 
+const SELF_COLOR = 'darkturquoise';
+const OTHER_COLOR = '#a7c957';
+const TEXT_COLOR = 'white';
+const ALERT_COLOR = 'gray';
+
 function percent(current, max){
     return Math.floor(current * 100 / max) + '%';
 }
@@ -55,8 +60,8 @@ class ChatScreen{
 
         socket.on('message', async (msg) => {
             const mySocket = msg.id == socket.id; 
-            const userColor =  mySocket ? 'darkturquoise' : 'white';
-            this.#pushTextMessage(msg.name, msg.content, userColor, 'orange');
+            const userColor =  mySocket ? SELF_COLOR : OTHER_COLOR;
+            this.#pushTextMessage(msg.name, msg.content, userColor, TEXT_COLOR);
         });
 
         socket.on('disconnect', () => {
@@ -65,11 +70,11 @@ class ChatScreen{
         
         socket.on('enterer', (user) => {
             const name = user.id == socket.id ? this.dictionary.You : user.name;
-            this.#pushTextMessage(name, ' ' + this.dictionary.enteredRoom, 'gray', 'gray');
+            this.#pushTextMessage(name, ' ' + this.dictionary.enteredRoom, ALERT_COLOR, ALERT_COLOR);
         });
 
         socket.on('exit', (user) => {
-            this.#pushTextMessage(user.name, ' ' + this.dictionary.hasLeftRoom, 'gray', 'gray');
+            this.#pushTextMessage(user.name, ' ' + this.dictionary.hasLeftRoom, ALERT_COLOR, ALERT_COLOR);
         });
 
         socket.on('connect_error', async (error) => {
@@ -175,7 +180,7 @@ class ChatScreen{
 
     #onMediaReceive(data){
         const {userId, userName, dataIndex, dataLength, type, mySelf} = data;
-        const userColor = mySelf ? 'darkturquoise' : 'white';
+        const userColor = mySelf ? SELF_COLOR : OTHER_COLOR;
         const displayType = this.#getDisplayType(type);
         if(dataIndex == 0){
             const message = displayType + ' [0%]';
@@ -202,7 +207,7 @@ class ChatScreen{
 
     #onMediaComplete(data){
         const {mySelf, userId, userName, url, type} = data;
-        const userColor = mySelf ? 'darkturquoise' : 'white';
+        const userColor = mySelf ? SELF_COLOR : OTHER_COLOR;
         const li = this.mediaElements.get(userId);
         li.innerText = '';
         this.#pushMediaMessage(li, userName, url, userColor, type);

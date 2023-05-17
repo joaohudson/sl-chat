@@ -4,7 +4,7 @@
 }
 body{
     text-align: center;
-    background-color: #ec9646;
+    background-color: #212A3E;
 }
 ul{
     list-style-type: none;
@@ -14,8 +14,8 @@ div{
 }
 button{
     background-color: black;
-    color: orange;
-    border-radius: 25px;
+    color: white;
+    border-radius: 10px;
     padding: 7px;
     font-size: 12px;
 }
@@ -35,12 +35,12 @@ h1{
     font-weight: bold;
     font-size: 30px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    color: rgb(184, 130, 24);
+    color: darkturquoise;
     text-shadow: 4px 0px 4px black, -4px 0px 4px black, 0px 4px 4px black, 0px -4px 4px black;
 }
 .textInput{
     background-color: black;
-    color: orange;
+    color: white;
     border-radius: 25px;
     text-align: center;
 }
@@ -70,7 +70,7 @@ h1{
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    background-color: rgba(88, 67, 22, 0.575);
+    background-color: #304867;
     padding: 15px;
     margin-top: 5px;
     margin-right: 20%;
@@ -80,8 +80,8 @@ h1{
     font-size: 14px;
 }
 .imageMessage{
-    width: 90%;
-    height: auto;
+    width: auto;
+    height: 290px;
 }
 .audioMessage{
     height: 26px;
@@ -90,11 +90,11 @@ h1{
 .fileMessage{
     font-weight: bold;
     font-size: 12px;
-    background-color: #ec9646;
+    background-color: #304867;
     color: black;
     text-decoration: none;
     border-radius: 25px;
-    padding: 0 4px;
+    padding: 2px 6px;
 }
 .messageInput{
     text-align: start;
@@ -108,7 +108,7 @@ h1{
 }
 .imageLabel{
     background-color: black;
-    color: orange;
+    color: white;
     border-radius: 25px;
     padding: 7px;
     font-size: 12px;
@@ -168,7 +168,7 @@ h1{
     height: 250px;
     margin: 0 auto;
     flex-direction: column;
-    background-color: #ec9646;
+    background-color: #304867;
 }
 .audioRecorderButtonDiv{
     display: flex;
@@ -225,7 +225,7 @@ h1{
     height: 250px;
     margin: 0 auto;
     flex-direction: column;
-    background-color: #ec9646;
+    background-color: #304867;
 }
 .dialogMessageDiv{
     display: flex;
@@ -253,7 +253,7 @@ h1{
     height: 30px;
 }
 .loadingPanel{
-    background-color: #ec9646;
+    background-color: #212a3e;
     position: absolute;
     display: flex;
     top: 0px;

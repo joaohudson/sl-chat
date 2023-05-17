@@ -28,5 +28,7 @@
     "DownloadFile": "Baixar Arquivo",
     "unespectedError": "Ocorreu um erro inesperado! Por favor atualize a página tente novamente.",
     "microphoneAcessError": "Não foi possível acessar o microfone!",
-    "roomNotFoundError": "Sala não encontrada! O link está incorreto ou todos já saíram da sala."
+    "roomNotFoundError": "Sala não encontrada! O link está incorreto ou todos já saíram da sala.",
+    "roomMaxUserError": "A sala está cheia!",
+    "serverMaxUserError": "Servidor lotado, por favor tente mais tarde."
 }

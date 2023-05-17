@@ -1,5 +1,4 @@
 import { AudioRecorder } from '/record/audio-recorder.js';
-import { decode } from '/error/decoder.js';
 
 function formatTime(nanoSeconds){
     const seconds = Math.floor(nanoSeconds / 1000);
@@ -8,10 +7,9 @@ function formatTime(nanoSeconds){
 }
 
 class AudioRecorderPanel{
-    constructor({div, dictionary, dialogPanel}){
+    constructor({div, dictionary}){
         this.div = div;
         this.dictionary = dictionary;
-        this.dialogPanel = dialogPanel;
         this.showing = false;
         this.audioRecorder = new AudioRecorder();
         this.displayAudioRecorder = div.querySelector('#displayAudioRecorder');
@@ -21,6 +19,15 @@ class AudioRecorderPanel{
     }
 
     async show(){
+        try{
+            return await this.#show();
+        }catch(e){
+            this.#stop();
+            throw e;
+        }
+    }
+
+    async #show(){
         if(this.showing){
             return;
         }
@@ -35,33 +42,26 @@ class AudioRecorderPanel{
 
         const promise = new Promise((res) => {
             this.audioRecorderSendButton.onclick = async () => {
-                this.#onStop();
+                this.#stop();
                 res(await this.audioRecorder.complete());
             };
             this.audioRecorderCancelButton.onclick = () => {
                 this.audioRecorder.cancel();
-                this.#onStop();
+                this.#stop();
                 res(null);
             };
         });
 
-        try{
-            await this.audioRecorder.record();
-            this.#onStart();
-            return promise;
-        }catch(e){
-            const errorMessage = decode(this.dictionary, e);
-            await this.dialogPanel.showMessage(errorMessage);
-            this.#onStop();
-            return null;
-        }
+        await this.audioRecorder.record();
+        this.#start();
+        return promise;
     }
 
-    #onStart(){
+    #start(){
         this.#runTime();
     }
 
-    #onStop(){
+    #stop(){
         clearInterval(this.timeInterval);
         this.#hide();
         this.#resetTime();

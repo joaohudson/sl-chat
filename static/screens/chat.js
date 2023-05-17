@@ -74,7 +74,7 @@ class ChatScreen{
         });
 
         socket.on('connect_error', async (error) => {
-            await this.dialogPanel.showMessage(decode(this.dictionary, error));
+            await this.#showError(error);
             location.replace(location.origin);
         });
 
@@ -136,10 +136,14 @@ class ChatScreen{
     }
 
     async #sendAudio(mediaManager){
-        const blob = await this.audioRecorderPanel.show();
-        this.#setSending(blob != null);
-        if(blob){
-            mediaManager.send(blob);
+        try{
+            const blob = await this.audioRecorderPanel.show();
+            this.#setSending(blob != null);
+            if(blob){
+                mediaManager.send(blob);
+            }
+        }catch(e){
+            await this.#showError(e);
         }
     }
 
@@ -215,6 +219,11 @@ class ChatScreen{
             this.mediaElements.delete(userId);
         }
         this.#setSending(false);
+    }
+
+    async #showError(error){
+        const errorMessage = decode(this.dictionary, error);
+        await this.dialogPanel.showMessage(errorMessage);
     }
 
     #getDisplayType(type){

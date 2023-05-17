@@ -38,6 +38,9 @@ h1{
     color: darkturquoise;
     text-shadow: 6px 0px 6px black, -6px 0px 6px black, 0px 6px 6px black, 0px -6px 6px black;
 }
+.headerInfo{
+    color: #eee;
+}
 .textInput{
     background-color: black;
     color: white;

@@ -4,8 +4,7 @@ const { User } = require('./user');
 const { Room } = require('./room');
 const { ChunkReceive } = require('./chunk-receive');
 const { MediaChunk } = require('./media-chunk');
-
-const ERROR_AUTH = 'Authentication error!';
+const { ROOM_NOT_FOUND_ERROR } = require('./errors');
 
 class Chat{
     constructor(io){
@@ -35,13 +34,13 @@ class Chat{
     #createUser(socket){
         let {userName, roomId, roomTitle} = socket.handshake.auth;
         if(!userName){
-            throw new Error(ERROR_AUTH);
+            throw new Error(ROOM_NOT_FOUND_ERROR);
         }
         if(!roomId){
             roomId = uuid();
             this.rooms[roomId] = new Room(roomId, roomTitle);
         }else if(!this.rooms[roomId]){
-            throw new Error(ERROR_AUTH);
+            throw new Error(ROOM_NOT_FOUND_ERROR);
         }
         const user = new User(socket, userName, roomId);
         this.users[socket.id] = user;

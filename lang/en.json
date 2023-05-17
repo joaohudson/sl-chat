@@ -25,5 +25,10 @@
     "Image": "Image",
     "Video": "Video",
     "File": "File",
-    "DownloadFile": "Download File"
+    "DownloadFile": "Download File",
+    "unespectedError": "An unexpected error occurred! Please refresh the page and try again.",
+    "microphoneAcessError": "Unable to access microphone!",
+    "roomNotFoundError": "Room not found! The link is incorrect or everyone has already left the room.",
+    "roomMaxUserError": "The room is full!",
+    "serverMaxUserError": "Server full, please try again later."
 }

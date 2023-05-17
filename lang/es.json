@@ -25,5 +25,10 @@
     "Image": "Imagen",
     "Video": "Video",
     "File": "Archivo",
-    "DownloadFile": "Descargar archivo"
+    "DownloadFile": "Descargar archivo",
+    "unespectedError": "¡Ocurrió un error inesperado! Actualice la página y vuelva a intentarlo.",
+    "microphoneAcessError": "¡No se puede acceder al micrófono!",
+    "roomNotFoundError": "¡Habitación no encontrada! El enlace es incorrecto o todos ya han salido de la sala.",
+    "roomMaxUserError": "¡La sala está llena!",
+    "serverMaxUserError": "Servidor lleno, inténtalo de nuevo más tarde."
 }

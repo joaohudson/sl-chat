@@ -1,0 +1,5 @@
+const ROOM_NOT_FOUND_ERROR = 'SLERR_ROOM_NOT_FOUND';
+
+module.exports = {
+    ROOM_NOT_FOUND_ERROR
+}

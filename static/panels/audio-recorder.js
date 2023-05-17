@@ -19,8 +19,17 @@ class AudioRecorderPanel{
     }
 
     async show(){
+        try{
+            return await this.#show();
+        }catch(e){
+            this.#stop();
+            throw e;
+        }
+    }
+
+    async #show(){
         if(this.showing){
-            throw new Error('Panel has been showing!');
+            return;
         }
         this.showing = true;
         this.div.style.display = '';
@@ -31,29 +40,36 @@ class AudioRecorderPanel{
 
         this.#resetTime();
 
-        const promise = new Promise((res) => {
+        const promise = new Promise((res, rej) => {
             this.audioRecorderSendButton.onclick = async () => {
-                this.#onStop();
-                res(await this.audioRecorder.complete());
+                this.#stop();
+                try{
+                    res(await this.audioRecorder.complete());
+                }catch(e){
+                    rej(e);
+                }
             };
             this.audioRecorderCancelButton.onclick = () => {
-                this.audioRecorder.cancel();
-                this.#onStop();
-                res(null);
+                this.#stop();
+                try{
+                    this.audioRecorder.cancel();
+                    res(null);
+                }catch(e){
+                    rej(e);
+                }
             };
         });
 
         await this.audioRecorder.record();
-        this.#onStart();
-
+        this.#start();
         return promise;
     }
 
-    #onStart(){
+    #start(){
         this.#runTime();
     }
 
-    #onStop(){
+    #stop(){
         clearInterval(this.timeInterval);
         this.#hide();
         this.#resetTime();

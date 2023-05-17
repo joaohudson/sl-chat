@@ -40,15 +40,23 @@ class AudioRecorderPanel{
 
         this.#resetTime();
 
-        const promise = new Promise((res) => {
+        const promise = new Promise((res, rej) => {
             this.audioRecorderSendButton.onclick = async () => {
                 this.#stop();
-                res(await this.audioRecorder.complete());
+                try{
+                    res(await this.audioRecorder.complete());
+                }catch(e){
+                    rej(e);
+                }
             };
             this.audioRecorderCancelButton.onclick = () => {
-                this.audioRecorder.cancel();
                 this.#stop();
-                res(null);
+                try{
+                    this.audioRecorder.cancel();
+                    res(null);
+                }catch(e){
+                    rej(e);
+                }
             };
         });
 

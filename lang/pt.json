@@ -25,5 +25,6 @@
     "Image": "Imagem",
     "Video": "Vídeo",
     "File": "Arquivo",
-    "DownloadFile": "Baixar Arquivo"
+    "DownloadFile": "Baixar Arquivo",
+    "unespectedError": "Erro inesperado!"
 }

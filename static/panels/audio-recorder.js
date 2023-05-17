@@ -1,4 +1,5 @@
 import { AudioRecorder } from '/record/audio-recorder.js';
+import { decode } from '/error/decoder.js';
 
 function formatTime(nanoSeconds){
     const seconds = Math.floor(nanoSeconds / 1000);
@@ -7,9 +8,10 @@ function formatTime(nanoSeconds){
 }
 
 class AudioRecorderPanel{
-    constructor({div, dictionary}){
+    constructor({div, dictionary, dialogPanel}){
         this.div = div;
         this.dictionary = dictionary;
+        this.dialogPanel = dialogPanel;
         this.showing = false;
         this.audioRecorder = new AudioRecorder();
         this.displayAudioRecorder = div.querySelector('#displayAudioRecorder');
@@ -20,7 +22,7 @@ class AudioRecorderPanel{
 
     async show(){
         if(this.showing){
-            throw new Error('Panel has been showing!');
+            return;
         }
         this.showing = true;
         this.div.style.display = '';
@@ -43,10 +45,17 @@ class AudioRecorderPanel{
             };
         });
 
-        await this.audioRecorder.record();
-        this.#onStart();
-
-        return promise;
+        try{
+            await this.audioRecorder.record();
+            this.#onStart();
+            return promise;
+        }catch(e){
+            console.log(e);
+            const errorMessage = decode(this.dictionary, e);
+            await this.dialogPanel.showMessage(errorMessage);
+            this.#onStop();
+            return null;
+        }
     }
 
     #onStart(){

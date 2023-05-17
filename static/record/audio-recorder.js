@@ -1,3 +1,5 @@
+import { ILLEGAL_STATE_ERROR } from "/error/errors.js";
+
 class AudioRecorder{
     #chunks
     #recorder
@@ -10,7 +12,7 @@ class AudioRecorder{
 
     async complete(){
         if(!this.#recorder){
-            throw new Error('Mutiples completes');
+            throw new Error(ILLEGAL_STATE_ERROR);
         }
         return new Promise((res) => {
             this.#recorder.onstop = () => {
@@ -23,7 +25,7 @@ class AudioRecorder{
 
     cancel(){
         if(!this.#recorder){
-            throw new Error('Mutiples audio recorder!');
+            return;
         }
         this.#recorder.onstop = () => this.#dispose();
         this.#recorder.stop();
@@ -31,7 +33,7 @@ class AudioRecorder{
 
     async record(){
         if(this.#recorder){
-            throw new Error('Mutiples audio recorder!');
+            throw new Error(ILLEGAL_STATE_ERROR);
         }
         this.#recorder = await this.#newAudioRecorder();
         this.#recorder.ondataavailable = ({data}) => this.#receiveData(data);
@@ -41,7 +43,7 @@ class AudioRecorder{
 
     getTime(){
         if(!this.#recorder){
-            throw new Error('Recorder dont playing!');
+            throw new Error(ILLEGAL_STATE_ERROR);
         }
         return Date.now() - this.#initTime;
     }

@@ -32,7 +32,8 @@ async function main(){
 
         const audioRecorderPanel = new AudioRecorderPanel({
             div: document.getElementById('audioRecorderPanelDiv'),
-            dictionary: dictionary
+            dictionary: dictionary,
+            dialogPanel: dialogPanel
         });
 
         const imagePanel = new ImagePanel({

@@ -1,4 +1,4 @@
-import { ILLEGAL_STATE_ERROR } from "/error/errors.js";
+import { ILLEGAL_STATE_ERROR, MICROPHONE_ACCESS_ERROR } from "/error/errors.js";
 
 class AudioRecorder{
     #chunks
@@ -67,9 +67,13 @@ class AudioRecorder{
     }
 
     async #newAudioRecorder(){
-        const stream = await navigator.mediaDevices.getUserMedia({audio: true});
-        const recorder = new MediaRecorder(stream);
-        return recorder;
+        try{
+            const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+            const recorder = new MediaRecorder(stream);
+            return recorder;
+        }catch(e){
+            throw new Error(MICROPHONE_ACCESS_ERROR);
+        }
     }
 }
 

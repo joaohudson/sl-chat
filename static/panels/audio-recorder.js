@@ -50,7 +50,6 @@ class AudioRecorderPanel{
             this.#onStart();
             return promise;
         }catch(e){
-            console.log(e);
             const errorMessage = decode(this.dictionary, e);
             await this.dialogPanel.showMessage(errorMessage);
             this.#onStop();

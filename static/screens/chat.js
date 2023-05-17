@@ -1,5 +1,6 @@
 import { MediaManager } from '/network/media-manager.js';
 import { Time } from "/utils/time.js";
+import { decode } from '/error/decoder.js';
 
 function percent(current, max){
     return Math.floor(current * 100 / max) + '%';
@@ -73,7 +74,7 @@ class ChatScreen{
         });
 
         socket.on('connect_error', async (error) => {
-            await this.dialogPanel.showMessage(error);
+            await this.dialogPanel.showMessage(decode(this.dictionary, error));
             location.replace(location.origin);
         });
 

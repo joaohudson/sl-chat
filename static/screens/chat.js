@@ -38,7 +38,7 @@ class ChatScreen{
     show({socket, userName}){
         this.div.style.display = 'block';
 
-        this.h1.innerText = 'Node Chat';
+        this.h1.innerText = 'SL Chat';
         this.profileNameLabel.innerText = this.dictionary.Profile + ': ' + userName;
         this.roomLinkCopyButtom.innerText = this.dictionary.roomLinkCopy;
         this.messageButton.innerText = this.dictionary.Send;

@@ -35,7 +35,7 @@ h1{
     font-weight: bold;
     font-size: 30px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    color: darkturquoise;
+    color: rgb(9, 241, 245);
     text-shadow: 6px 0px 6px black, -6px 0px 6px black, 0px 6px 6px black, 0px -6px 6px black;
 }
 .textInput{
@@ -114,6 +114,7 @@ h1{
     font-size: 12px;
 }
 .sendButton{
+    border-radius: 25px;
     margin: 5px;
     width: 60px;
     height: 35px;

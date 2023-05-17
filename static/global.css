@@ -36,7 +36,7 @@ h1{
     font-size: 30px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     color: darkturquoise;
-    text-shadow: 4px 0px 4px black, -4px 0px 4px black, 0px 4px 4px black, 0px -4px 4px black;
+    text-shadow: 6px 0px 6px black, -6px 0px 6px black, 0px 6px 6px black, 0px -6px 6px black;
 }
 .textInput{
     background-color: black;

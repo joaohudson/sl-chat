@@ -84,7 +84,9 @@ h1{
 }
 .imageMessage{
     width: auto;
-    height: 290px;
+    height: auto;
+    max-width: 90%;
+    max-height: 275px;
 }
 .audioMessage{
     height: 26px;

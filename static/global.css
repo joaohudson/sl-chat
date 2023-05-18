@@ -3,6 +3,7 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 body{
+    overscroll-behavior: contain;
     text-align: center;
     background-color: #212A3E;
 }

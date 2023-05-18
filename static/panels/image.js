@@ -12,7 +12,10 @@ class ImagePanel{
     }
 
     #fixImageSize(){
-        if(this.image.width > window.screen.width){
+        const {width: screenWidth, height: screenHeight} = window.visualViewport;
+        const relativeWidth = this.image.width / screenWidth;
+        const relativeHeight = this.image.height / screenHeight;
+        if(relativeWidth > relativeHeight){
             this.image.style.width = '100%';
             this.image.style.height = 'auto';
         }else{

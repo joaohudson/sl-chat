@@ -14,6 +14,7 @@ div{
     border-radius: 25px;
 }
 button{
+    cursor: pointer;
     background-color: black;
     color: white;
     border-radius: 10px;
@@ -38,6 +39,15 @@ h1{
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     color: darkturquoise;
     text-shadow: 6px 0px 6px black, -6px 0px 6px black, 0px 6px 6px black, 0px -6px 6px black;
+}
+.backButton{
+    position: absolute;
+    left: 23%;
+    top: 35px;
+    width: 35px;
+    height: 35px;
+    border-radius: 100%;
+    background-image: url('/resource/image/back-icon.svg');
 }
 .headerInfo{
     color: #eee;
@@ -295,6 +305,9 @@ h1{
     button{
         font-size: 14px;
     }
+    .backButton{
+        left: 15px;
+    }
     .dialogSubPanel{
        width: 90%;
        height: 60%; 
@@ -339,6 +352,11 @@ h1{
     .sendButton{
         width: 40px;
         height: 40px;
+    }
+    .backButton{
+        left: 10px;
+        width: 30px;
+        height: 30px;
     }
     button{
         font-size: 10px;

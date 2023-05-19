@@ -20,6 +20,7 @@ class ChatScreen{
         this.dialogPanel = dialogPanel;
         this.audioRecorderPanel = audioRecorderPanel;
         this.imagePanel = imagePanel;
+        this.h1 = h1;
         this.messageList = div.querySelector('#messageList');
         this.messageDiv = div.querySelector('#messageDiv');
         this.messageInput = div.querySelector('#messageInput');
@@ -29,9 +30,9 @@ class ChatScreen{
         this.mediaInput = div.querySelector('#imageInput');
         this.mediaButton = div.querySelector('#mediaButton');
         this.roomLinkCopyButtom = div.querySelector('#roomLinkCopyButtom');
-        this.h1 = h1;
         this.profileNameLabel = div.querySelector('#profileNameLabel');
         this.roomNameLabel = div.querySelector('#roomNameLabel');
+        this.backButton = div.querySelector('#backButton');
         this.mediaElements = new Map();
     }
 
@@ -83,8 +84,7 @@ class ChatScreen{
             location.replace(location.origin);
         });
 
-        this.h1.style.cursor = 'pointer';
-        this.h1.onclick = async () => {
+        this.backButton.onclick = async () => {
             if(await this.dialogPanel.showConfirmMessage(this.dictionary.confirmToHome)){
                 location.href = '/';
             }

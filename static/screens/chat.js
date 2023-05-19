@@ -83,6 +83,13 @@ class ChatScreen{
             location.replace(location.origin);
         });
 
+        this.h1.style.cursor = 'pointer';
+        this.h1.onclick = async () => {
+            if(await this.dialogPanel.showConfirmMessage(this.dictionary.confirmToHome)){
+                location.href = '/';
+            }
+        }
+
         this.messageInput.onkeydown = (e) => {
             if(e.key == 'Enter' && this.messageInput.value){
                 e.preventDefault();

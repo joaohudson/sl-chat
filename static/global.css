@@ -42,6 +42,7 @@ h1{
 }
 .backButton{
     position: absolute;
+    z-index: 0;
     left: 23%;
     top: 35px;
     width: 35px;

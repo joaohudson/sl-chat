@@ -273,6 +273,7 @@ h1{
 .loadingPanel{
     background-color: #212a3e;
     position: absolute;
+    z-index: 900;
     display: flex;
     top: 0px;
     left: 0px;

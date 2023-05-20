@@ -14,6 +14,7 @@ div{
     border-radius: 25px;
 }
 button{
+    user-select: none;
     cursor: pointer;
     background-color: black;
     color: white;
@@ -34,6 +35,7 @@ li{
     word-wrap: break-word;
 }
 h1{
+    user-select: none;
     font-weight: bold;
     font-size: 30px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -44,11 +46,14 @@ h1{
     position: absolute;
     z-index: 0;
     left: 23%;
-    top: 35px;
-    width: 35px;
+    background-color: transparent;
+    border-color: transparent;
+    top: 20px;
+    width: 40px;
     height: 35px;
-    border-radius: 100%;
-    background-image: url('/resource/image/back-icon.svg');
+    background-image: url('/resource/image/back-arrow-icon.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 .headerInfo{
     color: #eee;
@@ -308,6 +313,7 @@ h1{
         font-size: 14px;
     }
     .backButton{
+        top: 30px;
         left: 15px;
     }
     .dialogSubPanel{
@@ -348,6 +354,12 @@ h1{
 
 /*for tiny mobile*/
 @media only screen and (max-width: 300px){
+    h1{
+        font-size: 30px;
+    }
+    .backButton{
+        top: 20px;
+    }
     .timeAudioRecorder{
         font-size: 38px;
     }

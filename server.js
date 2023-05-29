@@ -5,12 +5,11 @@ const acceptLanguageParser = require('accept-language-parser');
 const {Server} = require('socket.io');
 const {Chat} = require('./chat');
 const {Translator} = require('./translator');
+const {maxHttpBufferSize, port} = require('./config.json');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {maxHttpBufferSize: 2e6}); //2MB for messages
-
-const PORT = '8080';
+const io = new Server(server, {maxHttpBufferSize});
 
 app.use(express.static(path.join(__dirname, 'static')));
 
@@ -30,6 +29,6 @@ app.get('/api/lang', (req, res) => {
     res.send(translator.get(languages));
 });
 
-server.listen(PORT, () => {
-    console.log('Server listening on port: ' + PORT);
+server.listen(port, () => {
+    console.log('Server listening on port: ' + port);
 });

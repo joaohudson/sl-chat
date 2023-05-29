@@ -1,3 +1,5 @@
 {
-    "roomDeleteTime": 120000
+    "roomDeleteTime": 120000,
+    "maxHttpBufferSize": 2e6,
+    "port": "8080"
 }

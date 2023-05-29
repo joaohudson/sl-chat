@@ -1,13 +1,17 @@
 const uuid = require('uuid').v4;
+const { Timer } = require('./time/timer');
 const { Message } = require('./message');
 const { User } = require('./user');
 const { Room } = require('./room');
 const { ChunkReceive } = require('./chunk-receive');
 const { MediaChunk } = require('./media-chunk');
 const { ROOM_NOT_FOUND_ERROR } = require('./errors');
+const { roomDeleteTime } = require('./config.json');
 
 class Chat{
+    #deleteRoomTimer
     constructor(io){
+        this.#deleteRoomTimer = new Timer();
         this.io = io;
         this.rooms = {};
         this.users = {};
@@ -75,9 +79,11 @@ class Chat{
         }
         delete this.users[socket.id];
         delete room.users[socket.id];
-        if(Object.keys(room.users).length == 0){
-            delete this.rooms[roomId];
-        }
+        this.#deleteRoomTimer.run(roomDeleteTime, () => {
+            if(Object.keys(room.users).length == 0){
+                delete this.rooms[roomId];
+            }
+        });
     }
 
     #onMenssage(sender, request){

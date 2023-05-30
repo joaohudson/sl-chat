@@ -5,6 +5,10 @@ class Room{
         this.users = {};
     }
 
+    getUserCount(){
+        return Object.keys(this.users).length;
+    }
+
     dto(){
         return {
             id: this.id,

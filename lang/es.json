@@ -31,5 +31,5 @@
     "microphoneAcessError": "¡No se puede acceder al micrófono!",
     "roomNotFoundError": "¡Habitación no encontrada! El enlace es incorrecto o todos ya han salido de la sala.",
     "roomMaxUserError": "¡La sala está llena!",
-    "serverMaxUserError": "Servidor lleno, inténtalo de nuevo más tarde."
+    "serverMaxRoomError": "Servidor lleno, inténtalo de nuevo más tarde."
 }

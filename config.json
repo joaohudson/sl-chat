@@ -1,5 +1,7 @@
 {
     "roomDeleteTime": 120000,
     "maxHttpBufferSize": 2e6,
-    "port": "8080"
+    "port": "8080",
+    "maxRoom": 1000,
+    "maxUser": 30
 }

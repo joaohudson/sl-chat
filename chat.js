@@ -5,8 +5,8 @@ const { User } = require('./user');
 const { Room } = require('./room');
 const { ChunkReceive } = require('./chunk-receive');
 const { MediaChunk } = require('./media-chunk');
-const { ROOM_NOT_FOUND_ERROR } = require('./errors');
-const { roomDeleteTime } = require('./config.json');
+const { ROOM_NOT_FOUND_ERROR, ROOM_MAX_ERROR, ROOM_MAX_USER_ERROR } = require('./errors');
+const { roomDeleteTime, maxUser, maxRoom } = require('./config.json');
 
 class Chat{
     #deleteRoomTimer
@@ -41,10 +41,16 @@ class Chat{
             throw new Error(ROOM_NOT_FOUND_ERROR);
         }
         if(!roomId){
+            if(this.getRoomCount() >= maxRoom){
+                throw new Error(ROOM_MAX_ERROR);
+            }
             roomId = uuid();
             this.rooms[roomId] = new Room(roomId, roomTitle);
         }else if(!this.rooms[roomId]){
             throw new Error(ROOM_NOT_FOUND_ERROR);
+        }
+        if(this.rooms[roomId].getUserCount() >= maxUser){
+            throw new Error(ROOM_MAX_USER_ERROR);
         }
         const user = new User(socket, userName, roomId);
         this.users[socket.id] = user;
@@ -79,7 +85,7 @@ class Chat{
         }
         delete this.users[socket.id];
         delete room.users[socket.id];
-        this.#deleteRoomTimer.run(roomDeleteTime, () => {
+        this.#deleteRoomTimer.run(room.id, roomDeleteTime, () => {
             if(Object.keys(room.users).length == 0){
                 delete this.rooms[roomId];
             }

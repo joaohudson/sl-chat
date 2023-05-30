@@ -1,17 +1,18 @@
 class Timer{
-    #runner
+    #runners
     constructor(){
-        this.#runner = null;
+        this.#runners = new Map();
     }
 
-    run(time, call){
-        if(this.#runner){
-            clearTimeout(this.#runner);
+    run(id, time, call){
+        if(this.#runners.has(id)){
+            clearTimeout(this.#runners.get(id));
         }
-        this.#runner = setTimeout(() => {
+        const runner = setTimeout(() => {
             call();
-            this.#runner = null;
+            this.#runners.delete(id);
         }, time);
+        this.#runners.set(id, runner);
     }
 }
 

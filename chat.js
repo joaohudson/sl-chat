@@ -1,10 +1,10 @@
 const uuid = require('uuid').v4;
 const { Timer } = require('./time/timer');
-const { Message } = require('./message');
-const { User } = require('./user');
-const { Room } = require('./room');
-const { ChunkReceive } = require('./chunk-receive');
-const { MediaChunk } = require('./media-chunk');
+const { Message } = require('./models/message');
+const { User } = require('./models/user');
+const { Room } = require('./models/room');
+const { ChunkReceive } = require('./models/chunk-receive');
+const { MediaChunk } = require('./models/media-chunk');
 const { ROOM_NOT_FOUND_ERROR, ROOM_MAX_ERROR, ROOM_MAX_USER_ERROR } = require('./errors');
 const { roomDeleteTime, maxUser, maxRoom } = require('./config.json');
 

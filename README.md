@@ -1,7 +1,7 @@
-## Chat Node
+## SL Char
 
 ### Description
-Chat node is a web chat created for temporary conversations without storage or registration, all in a practical and uncompromising way.
+SL Chat is a web chat created for temporary conversations without storage or registration, all in a practical and uncompromising way.
 
 ### Images
 <img src="/printscreens/captura01.PNG">

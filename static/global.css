@@ -65,10 +65,13 @@ h1{
     color: #eee;
 }
 .textInput{
-    background-color: black;
-    color: white;
-    border-radius: 25px;
+    background-color: transparent;
+    color: black;
     text-align: center;
+    padding-top: 15px 10px 10px 10px;
+    margin: 10px;
+    border: none;
+    border-bottom: 1px solid black;
 }
 .verticalSpace{
     margin-top: 25px;

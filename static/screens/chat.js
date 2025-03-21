@@ -63,7 +63,8 @@ class ChatScreen{
         socket.on('message', async (msg) => {
             const mySocket = msg.id == socket.id; 
             const userColor =  mySocket ? SELF_COLOR : OTHER_COLOR;
-            this.#pushTextMessage(msg.name, msg.content, userColor, TEXT_COLOR);
+            const name = mySocket ? this.dictionary.You : msg.name;
+            this.#pushTextMessage(name, msg.content, userColor, TEXT_COLOR);
         });
 
         socket.on('disconnect', () => {

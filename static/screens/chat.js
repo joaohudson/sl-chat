@@ -197,7 +197,8 @@ class ChatScreen{
         const displayType = this.#getDisplayType(type);
         if(dataIndex == 0){
             const message = displayType + ' [0%]';
-            const li = this.#pushTextMessage(userName, message, userColor, userColor);
+            const name = mySelf ? this.dictionary.You : userName;
+            const li = this.#pushTextMessage(name, message, userColor, userColor);
             this.mediaElements.set(userId, li);
         }else{
             if(!this.mediaElements.has(userId)){
@@ -220,10 +221,11 @@ class ChatScreen{
 
     #onMediaComplete(data){
         const {mySelf, userId, userName, url, type} = data;
+        const name = mySelf ? this.dictionary.You : userName;
         const userColor = mySelf ? SELF_COLOR : OTHER_COLOR;
         const li = this.mediaElements.get(userId);
         li.innerText = '';
-        this.#pushMediaMessage(li, userName, url, userColor, type);
+        this.#pushMediaMessage(li, name, url, userColor, type);
     }
 
     #onMediaCancel(userId){
